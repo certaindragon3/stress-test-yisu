@@ -29,7 +29,7 @@ export function ClaimInput({
         onChange={(e) => onClaimChange(e.target.value)}
         placeholder="Paste a claim about AI and education."
         rows={4}
-        className="resize-none border-neutral-300 bg-white px-4 py-3 text-lg leading-relaxed text-neutral-900 shadow-none focus-visible:border-ink focus-visible:ring-0 md:text-lg"
+        className="resize-none rounded-none border-neutral-300 bg-white px-4 py-3 text-lg leading-relaxed text-neutral-900 shadow-none focus-visible:border-ink focus-visible:ring-0 md:text-lg"
         disabled={isLoading}
       />
 
@@ -40,7 +40,7 @@ export function ClaimInput({
             type="button"
             onClick={() => onClaimChange(c)}
             disabled={isLoading}
-            className="rounded-full border border-neutral-300 bg-white px-3 py-1 text-sm italic text-neutral-600 transition-colors hover:border-ink hover:text-ink disabled:opacity-50"
+            className="border border-neutral-300 bg-white px-3 py-1 text-sm italic text-neutral-600 transition-colors hover:border-ink hover:text-ink disabled:opacity-50"
           >
             {c}
           </button>

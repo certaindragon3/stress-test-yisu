@@ -8,7 +8,7 @@ import { buildSystemPrompt } from "@/lib/system-prompt";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const MODEL_ID = "gemini-3.1-pro";
+const MODEL_ID = "gemini-3.1-pro-preview";
 
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY,
