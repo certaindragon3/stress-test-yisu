@@ -1,30 +1,30 @@
-import { Geist, Geist_Mono } from "next/font/google"
+import type { Metadata } from "next";
+import { EB_Garamond } from "next/font/google";
 
-import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import "./globals.css";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'})
-
-const fontMono = Geist_Mono({
+const ebGaramond = EB_Garamond({
   subsets: ["latin"],
-  variable: "--font-mono",
-})
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-eb-garamond",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "The AI Discourse Stress-Tester",
+  description:
+    "A thinking instrument that presses a claim about AI and education through three dimensions drawn from Yisu Zhou's Software 3.0 University keynote.",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
-    >
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
+    <html lang="en" className={ebGaramond.variable}>
+      <body className="bg-white font-sans text-neutral-900 antialiased">
+        {children}
       </body>
     </html>
-  )
+  );
 }
