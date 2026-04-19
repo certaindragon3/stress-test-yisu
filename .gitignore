@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
+/.venv-mineru
 /.pnp
 .pnp.*
 .yarn/*
@@ -34,3 +35,6 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated research artifacts
+/data/processed/
