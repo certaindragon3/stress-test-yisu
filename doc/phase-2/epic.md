@@ -6,6 +6,15 @@
 > highlighted. The instrument shows its work — through typography, not
 > charts.
 
+## Current status
+
+Shipped on 2026-04-20 in commit `b0a35b9` (`phase2`). All eight steps
+of `closeout.md` pass under `agent-browser` verification. The drawer
+is a native `<details>`/`<summary>` element; `<mark>` highlighting
+uses `bg-ink-wash` (`#f4f6f3`); auto-scroll lands the match at roughly
+one-third from the panel top; `/api/provenance` returns HTTP 200 with
+a graceful `{ error }` body for unresolvable sources (no 500).
+
 ## Decision (settled with the author, 2026-04-19)
 
 Originally proposed as a parallel sub-page. Rejected: BUILD_SPEC §4
