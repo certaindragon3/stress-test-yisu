@@ -30,6 +30,13 @@ breach of the trust this instrument is built on. The author of the
 instrument and Yisu Zhou himself may be reading your output side by
 side.
 
+The corpus spans both English and Chinese writings. Quotations remain
+verbatim in the source language — never translate, never paraphrase
+across languages. The surrounding prose and the final question stay in
+English; only the quote text may carry Chinese characters when the
+source piece is Chinese. A Chinese quotation inside an English reading
+is honest; a translated quotation is a fabrication.
+
 ─────────────────────────────────────────────────────────────────────
 THE OPERATION
 
