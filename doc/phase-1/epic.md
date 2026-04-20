@@ -14,6 +14,22 @@ passes `verifyQuote()` and renders with `✓ verified`. Whitespace and
 Unicode-punctuation handling is robust enough that no honest quote is
 falsely rejected.
 
+## Current status
+
+As of 2026-04-20, the corpus has been expanded to 10 reviewed pieces:
+the original seven plus `xinrui-weekly-2023-year-end-questionnaire.md`,
+`beijing-news-2020-interview-outline.md`, and
+`what-kind-of-high-school-what-kind-of-education.md`. The expansion is
+targeted at the current chip set's weak spots: ChatGPT and machine
+knowing, data-driven claims about learning, RCT-to-policy extrapolation,
+and skill formation.
+
+An API smoke test against `next start` on port 3001 produced 15 attempted
+quotes across the five chip claims, with 13 passing verification
+(`86.7%`). This clears the Phase 1 rate threshold as a preliminary
+signal, but it is not a replacement for the full 25-press browser
+closeout in `closeout.md`.
+
 ## In scope
 
 - Human curation of reviewed pieces from `Yisu data/` and
@@ -25,6 +41,10 @@ falsely rejected.
 - Tighten `verifyQuote()` to also normalize curly quotes (`" " ' '`)
   to ASCII equivalents and to fold non-breaking space to space, so
   copy-paste artifacts in the corpus do not break verification.
+- Normalize lightweight Markdown/HTML markup before quote matching, so
+  an honest quote is not rejected merely because the model omits
+  emphasis markers around words that are italicized in the Markdown
+  corpus.
 - Add a `pnpm corpus:check` script that, given a quote text on stdin,
   reports whether it would pass verification — useful for rehearsal
   triage when a quote is rejected on stage.
@@ -72,6 +92,11 @@ falsely rejected.
 - **Smart-quote drift.** Markdown editors and Pandoc both like to
   rewrite quotes. The normalization layer must run before substring
   match; add tests for `" "` and `' '` round-trips.
+- **Smoke test is not closeout.** The current API smoke test establishes
+  that the corpus expansion moved the hit rate in the right direction.
+  Phase 1 is not formally complete until the browser-driven 25-press
+  closeout verifies rendered blockquotes, `✓ verified` badges, and
+  one-sentence final questions end-to-end.
 
 ## Reference
 

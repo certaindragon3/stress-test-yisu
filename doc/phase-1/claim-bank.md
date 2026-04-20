@@ -168,6 +168,14 @@
 - Yisu's endorsement of individual chips is currently provisional.
   BUILD_SPEC §11 still carries the caveat "final list to be confirmed
   with him in the co-design meeting."
+- On 2026-04-20, the Phase 1 corpus was expanded from 7 to 10 pieces
+  with three targeted additions: `《信睿周报》2023年终特辑问卷_周忆粟`
+  for ChatGPT, knowing, quantification, and knowledge experts;
+  `新京报2020周忆粟老师采访提纲` for data-driven claims about
+  learning and misplaced concreteness; and `什么样的高中，什么样的教育`
+  for RCT-to-policy extrapolation, skill formation, and public
+  education goals. A one-press-per-chip API smoke test after the
+  expansion reached 13 verified quotes out of 15 attempts (`86.7%`).
 - On 2026-04-20, after a preliminary rehearsal pass, C3 and C5 were
   rotated. The old C3 ("AI tutors help students learn more in less
   time.") and old C5 ("Teachers must not let AI substitute for

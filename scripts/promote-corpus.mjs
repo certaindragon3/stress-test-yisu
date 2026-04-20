@@ -15,6 +15,21 @@ const pieces = [
     source: "interview/教育技术的展望和挑战.md",
   },
   {
+    filename: "xinrui-weekly-2023-year-end-questionnaire.md",
+    title: "《信睿周报》2023年终特辑问卷_周忆粟",
+    source: "interview/《信睿周报》2023年终特辑问卷_周忆粟.md",
+  },
+  {
+    filename: "beijing-news-2020-interview-outline.md",
+    title: "新京报2020周忆粟老师采访提纲",
+    source: "interview/新京报2020周忆粟老师采访提纲.md",
+  },
+  {
+    filename: "what-kind-of-high-school-what-kind-of-education.md",
+    title: "什么样的高中，什么样的教育",
+    source: "interview/什么样的高中，什么样的教育.md",
+  },
+  {
     filename: "fruits-of-opportunism.md",
     title: "机会主义的橘与枳──读蔺乐的《机会主义的果实》有感",
     aliases: ["机会主义的橘与枳── 读蔺乐的《机会主义的果实》有感"],

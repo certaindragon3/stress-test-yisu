@@ -6,6 +6,10 @@ const corpusDir = join(process.cwd(), "content", "corpus")
 // Must mirror lib/verify.ts normalize() exactly.
 function normalize(s) {
   return s
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/<\/?[^>]+>/g, "")
+    .replace(/\\([[\]()*_`])/g, "$1")
+    .replace(/[*_`]/g, "")
     .replace(/[\u00a0\u3000]/g, " ")
     .replace(/[\u2018\u2019\u201b\u2032]/g, "'")
     .replace(/[\u201c\u201d\u201e\u2033]/g, '"')
