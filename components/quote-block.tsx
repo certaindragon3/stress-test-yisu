@@ -1,5 +1,7 @@
 import { Streamdown } from "streamdown";
 
+import { ProvenanceDrawer } from "@/components/provenance-drawer";
+
 type Verification = "pending" | "verified" | "unverified";
 
 export function QuoteBlock({
@@ -32,6 +34,7 @@ export function QuoteBlock({
         <span>— {source}</span>
         <span className="small-caps text-[10px] text-ink">✓ verified</span>
       </figcaption>
+      <ProvenanceDrawer source={source} text={text} />
     </figure>
   );
 }
