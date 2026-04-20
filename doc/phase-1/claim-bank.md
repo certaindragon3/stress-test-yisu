@@ -40,17 +40,18 @@
   relationship? What labor market does the graduate TA pipeline feed?
 - **Source (evidence side):** [Kestin et al., *Scientific Reports*, 2025 — RCT, AI tutor outperforms active-learning physics classroom on post-test](https://www.nature.com/articles/s41598-025-97652-6); [Khanmigo home](https://www.khanmigo.ai/); [Sal Khan on Khanmigo's actual uptake, 2026-04-09](https://www.chalkbeat.org/2026/04/09/sal-khan-reflects-on-ai-in-schools-and-khanmigo/)
 
-### C3. "AI tutors help students learn more in less time."
+### C3. "Kids shouldn't learn to code — leave it up to AI."
 
-- **Canonical form:** *"Students learn significantly more in less
-  time when using an AI-powered tutor compared with an active
-  learning class."* — Kestin et al. (Harvard physics), *Scientific
-  Reports*, 2025.
-- **Axis hook:** epistemological. The study is an RCT on post-test
-  scores (verifiability side). Public reuse promptly extends the
-  finding to claims about mentorship and long-horizon learning
-  (novelty side). Name the smuggle.
-- **Source:** [Kestin et al., *Scientific Reports* 15, 2025](https://www.nature.com/articles/s41598-025-97652-6)
+- **Canonical form:** *"I would almost say that it is almost nobody's
+  job to program. That is the miracle of artificial intelligence."* —
+  Jensen Huang, World Government Summit, Dubai, 2024-02. Widely
+  paraphrased in education press as "kids shouldn't learn to code."
+- **Axis hook:** mastery pipeline. If the foundational rep of writing
+  code from scratch is retired, how does the next generation build
+  the tacit judgment that lets them audit a machine's output? This
+  claim is the canonical ramen-chef case — Yisu's own worked example
+  lands on it directly.
+- **Sources:** [Tom's Hardware — "Jensen Huang advises against learning to code"](https://www.tomshardware.com/tech-industry/artificial-intelligence/jensen-huang-advises-against-learning-to-code-leave-it-up-to-ai); [The Register — "Everybody is now a programmer"](https://www.theregister.com/2024/02/27/jensen_huang_coders/)
 
 ### C4. "The essay is dead."
 
@@ -63,7 +64,85 @@
   what tacit skill does the replacement fail to build?
 - **Source:** [Maclean's — The university essay will die out](https://macleans.ca/society/technology/ai-university-essay/); [Hua Hsu — What Happens After AI Destroys College Writing (*The New Yorker*, 2025-07)](https://www.bard.edu/news/hua-hsu-new-yorker-ai-college-writing-2025-07-07)
 
-### C5. "Teachers must not let AI substitute for teaching."
+### C5. "Within ten years, AI will replace many doctors and teachers."
+
+- **Canonical form:** *"In ten years, humans won't be needed for most
+  things"* — Bill Gates, CNBC interview, 2025-03-26. The interview
+  frames doctors and teachers as the specific jurisdictions being
+  annexed.
+- **Axis hook:** jurisdictional, delivered as a near-eschatological
+  claim. The smuggle: "replace" lumps together codifiable tasks
+  (pattern recognition, routine diagnosis) and abstract professional
+  judgment (diagnosis under ambiguity, care under moral weight).
+  Press on the word *many*, and on which parts of the profession the
+  claim is actually eating.
+- **Source:** [CNBC — "Humans won't be needed for most things"](https://www.cnbc.com/2025/03/26/bill-gates-on-ai-humans-wont-be-needed-for-most-things.html)
+
+---
+
+## Extended bank (not on chips, available for rehearsal and co-design)
+
+### E1. "It is our job to create computing technology such that nobody has to program. Everybody in the world is now a programmer."
+
+- **Source:** Jensen Huang, World Government Summit, Dubai, 2024-02.
+- **Axis hook:** epistemological + mastery. Programming has both a
+  verifiability side (does it compile, does it pass tests) and a
+  novelty side (is it the right program to write). The claim collapses
+  the second into the first.
+- **URL:** [The Register](https://www.theregister.com/2024/02/27/jensen_huang_coders/)
+
+### E2. "Giving every student on the planet an artificially intelligent but amazing personal tutor."
+
+- **Source:** Sal Khan, TED, April 2023. Re-examined by Khan himself
+  in 2026: *"For a lot of students, it was a non-event. They just
+  didn't use it much."*
+- **Axis hook:** jurisdictional (who is the tutor) + epistemological
+  (is the original claim falsifiable, and what does "non-event" do to
+  its standing three years on?).
+- **URLs:** [Freethink — the original claim](https://www.freethink.com/consumer-tech/khanmigo-ai-tutor); [Chalkbeat — Khan's reassessment](https://www.chalkbeat.org/2026/04/09/sal-khan-reflects-on-ai-in-schools-and-khanmigo/)
+
+### E3. "College is maybe not working great for most people — my kid will probably not go."
+
+- **Source:** Sam Altman, 2025 podcast.
+- **Axis hook:** jurisdictional. Who speaks for the value of college?
+  An exec publicly dismissing it while his firm sells "study mode" to
+  its students is a jurisdictional move visible in Yisu's frame.
+- **URL:** [Melbourne Business School summary](https://mbs.edu/news/why-openai-ceo-sam-altman-is-excited-about-the-future-of-education)
+
+### E4. "AI chatbots will teach kids to read within 18 months — you'll be stunned by how it helps."
+
+- **Source:** Bill Gates, CNBC, 2023-04-22. The 18-month window has
+  expired; press on accountability.
+- **Axis hook:** epistemological. The claim was framed as empirically
+  checkable. What does the discourse do with a falsified or
+  unfulfilled timeline — quietly drop it, or re-describe it?
+- **URL:** [CNBC](https://www.cnbc.com/2023/04/22/bill-gates-ai-chatbots-will-teach-kids-how-to-read-within-18-months.html)
+
+### E5. "AI tutors will be as good a tutor as any human ever could be."
+
+- **Source:** Bill Gates, 2024.
+- **Axis hook:** epistemological. "As good as" against what metric?
+  Posttest scores, engagement, mentorship, vocational initiation —
+  each carries different standards of evidence.
+- **URL:** [CNBC, 2023-08-15 (earlier phrasing)](https://www.cnbc.com/2023/08/15/bill-gates-ai-tutors-will-be-like-a-great-high-school-teacher.html)
+
+### E6. "AI tutors help students learn more in less time."
+
+- **Canonical form:** *"Students learn significantly more in less
+  time when using an AI-powered tutor compared with an active
+  learning class."* — Kestin et al. (Harvard physics), *Scientific
+  Reports*, 2025.
+- **Axis hook:** epistemological. The study is an RCT on post-test
+  scores (verifiability side). Public reuse promptly extends the
+  finding to claims about mentorship and long-horizon learning
+  (novelty side). Name the smuggle.
+- **Demoted from chip set (2026-04-20):** the Yisu corpus has no
+  direct material on RCT methodology, so the instrument could not
+  find honest verbatim support under any axis. Preserve here for
+  rehearsal once the corpus expands.
+- **Source:** [Kestin et al., *Scientific Reports* 15, 2025](https://www.nature.com/articles/s41598-025-97652-6)
+
+### E7. "Teachers must not let AI substitute for teaching."
 
 - **Canonical form:** *"Teachers should not use generative AI as a
   substitute for the primary teaching role. Teachers are prohibited
@@ -75,71 +154,12 @@
   doesn't only press pro-AI claims — the mastery pipeline may
   actually concur here, but the question of who controls the line
   between "substitution" and "assistance" is contested.
+- **Demoted from chip set (2026-04-20):** the Yisu corpus has little
+  material on the *defence* of teacher jurisdiction; the instrument
+  produced honest silence across all three axes. Preserve here for
+  rehearsal once the corpus expands to include Yisu on teacher-side
+  professional protection.
 - **Source:** [China issues guidelines to promote AI education in primary and secondary schools (*Global Times*, 2025-05)](https://www.globaltimes.cn/page/202505/1333878.shtml)
-
----
-
-## Extended bank (not on chips, available for rehearsal and co-design)
-
-### E1. "Within ten years, AI will replace many doctors and teachers — humans won't be needed for most things."
-
-- **Source:** Bill Gates, CNBC interview, 2025-03-26.
-- **Axis hook:** jurisdictional, delivered as a near-eschatological
-  claim. The smuggle: "replace" lumps together manual tasks and
-  professional judgment. Press on the word *many*.
-- **URL:** [CNBC](https://www.cnbc.com/2025/03/26/bill-gates-on-ai-humans-wont-be-needed-for-most-things.html)
-
-### E2. "It is our job to create computing technology such that nobody has to program. Everybody in the world is now a programmer."
-
-- **Source:** Jensen Huang, World Government Summit, Dubai, 2024-02.
-- **Axis hook:** epistemological + mastery. Programming has both a
-  verifiability side (does it compile, does it pass tests) and a
-  novelty side (is it the right program to write). The claim collapses
-  the second into the first.
-- **URL:** [The Register](https://www.theregister.com/2024/02/27/jensen_huang_coders/)
-
-### E3. "Kids shouldn't learn to code — leave it up to AI."
-
-- **Source:** Jensen Huang, same event cluster, 2024.
-- **Axis hook:** mastery pipeline. If the rep of writing code from
-  scratch is retired, how does the next generation develop judgment
-  about what the machine's output is worth?
-- **URL:** [Tom's Hardware](https://www.tomshardware.com/tech-industry/artificial-intelligence/jensen-huang-advises-against-learning-to-code-leave-it-up-to-ai)
-
-### E4. "Giving every student on the planet an artificially intelligent but amazing personal tutor."
-
-- **Source:** Sal Khan, TED, April 2023. Re-examined by Khan himself
-  in 2026: *"For a lot of students, it was a non-event. They just
-  didn't use it much."*
-- **Axis hook:** jurisdictional (who is the tutor) + epistemological
-  (is the original claim falsifiable, and what does "non-event" do to
-  its standing three years on?).
-- **URLs:** [Freethink — the original claim](https://www.freethink.com/consumer-tech/khanmigo-ai-tutor); [Chalkbeat — Khan's reassessment](https://www.chalkbeat.org/2026/04/09/sal-khan-reflects-on-ai-in-schools-and-khanmigo/)
-
-### E5. "College is maybe not working great for most people — my kid will probably not go."
-
-- **Source:** Sam Altman, 2025 podcast.
-- **Axis hook:** jurisdictional. Who speaks for the value of college?
-  An exec publicly dismissing it while his firm sells "study mode" to
-  its students is a jurisdictional move visible in Yisu's frame.
-- **URL:** [Melbourne Business School summary](https://mbs.edu/news/why-openai-ceo-sam-altman-is-excited-about-the-future-of-education)
-
-### E6. "AI chatbots will teach kids to read within 18 months — you'll be stunned by how it helps."
-
-- **Source:** Bill Gates, CNBC, 2023-04-22. The 18-month window has
-  expired; press on accountability.
-- **Axis hook:** epistemological. The claim was framed as empirically
-  checkable. What does the discourse do with a falsified or
-  unfulfilled timeline — quietly drop it, or re-describe it?
-- **URL:** [CNBC](https://www.cnbc.com/2023/04/22/bill-gates-ai-chatbots-will-teach-kids-how-to-read-within-18-months.html)
-
-### E7. "AI tutors will be as good a tutor as any human ever could be."
-
-- **Source:** Bill Gates, 2024.
-- **Axis hook:** epistemological. "As good as" against what metric?
-  Posttest scores, engagement, mentorship, vocational initiation —
-  each carries different standards of evidence.
-- **URL:** [CNBC, 2023-08-15 (earlier phrasing)](https://www.cnbc.com/2023/08/15/bill-gates-ai-tutors-will-be-like-a-great-high-school-teacher.html)
 
 ---
 
@@ -148,12 +168,18 @@
 - Yisu's endorsement of individual chips is currently provisional.
   BUILD_SPEC §11 still carries the caveat "final list to be confirmed
   with him in the co-design meeting."
-- C3 and C5 were selected over the original Phase-0 seeds ("Students
-  who don't use AI will fall behind.", "Teachers should ban AI to
-  preserve learning.") because (a) they carry named sources and (b)
-  they activate different axes more cleanly. If Yisu prefers the
-  earlier phrasings or wants to swap in an E-series claim, the chip
-  list lives in one place: `components/claim-input.tsx`.
+- On 2026-04-20, after a preliminary rehearsal pass, C3 and C5 were
+  rotated. The old C3 ("AI tutors help students learn more in less
+  time.") and old C5 ("Teachers must not let AI substitute for
+  teaching.") both produced 0% verification under the current corpus
+  and have been demoted to E6 and E7 respectively. They are preserved
+  with named sources, ready to return to the chip set once the
+  corpus grows to cover RCT methodology (for E6) and the defence of
+  teacher jurisdiction (for E7).
+- The current chips activate the three axes as follows: C1
+  (epistemological), C2 (jurisdictional), C3 (mastery + ramen chef),
+  C4 (mastery + essay-as-rep), C5 (jurisdictional + professions
+  sociology). Each axis has at least two chips pressing it.
 - The E-series is a running list, not a canon. Add to it when a
   claim appears in public discourse that the instrument should be
   able to press honestly.

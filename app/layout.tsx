@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EB_Garamond } from "next/font/google";
+import { EB_Garamond, Noto_Serif_SC } from "next/font/google";
 
 import "./globals.css";
 
@@ -8,6 +8,13 @@ const ebGaramond = EB_Garamond({
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   variable: "--font-eb-garamond",
+  display: "swap",
+});
+
+const notoSerifSC = Noto_Serif_SC({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-noto-serif-sc",
   display: "swap",
 });
 
@@ -21,7 +28,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={ebGaramond.variable}>
+    <html lang="en" className={`${ebGaramond.variable} ${notoSerifSC.variable}`}>
       <body className="bg-white font-sans text-neutral-900 antialiased">
         {children}
       </body>

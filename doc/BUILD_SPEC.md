@@ -233,9 +233,9 @@ meeting.
 
 - *"Prompting is the new literacy."*
 - *"AI tutors will replace TAs within five years."*
-- *"AI tutors help students learn more in less time."*
+- *"Kids shouldn't learn to code — leave it up to AI."*
 - *"The essay is dead."*
-- *"Teachers must not let AI substitute for teaching."*
+- *"Within ten years, AI will replace many doctors and teachers."*
 
 ## 12. Completion criteria
 

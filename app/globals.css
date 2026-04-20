@@ -2,9 +2,9 @@
 @import "shadcn/tailwind.css";
 
 @theme inline {
-    --font-sans: var(--font-eb-garamond);
-    --font-heading: var(--font-eb-garamond);
-    --font-serif: var(--font-eb-garamond);
+    --font-sans: var(--font-eb-garamond), var(--font-noto-serif-sc), serif;
+    --font-heading: var(--font-eb-garamond), var(--font-noto-serif-sc), serif;
+    --font-serif: var(--font-eb-garamond), var(--font-noto-serif-sc), serif;
 
     --color-ink: #1f3a2e;
     --color-ink-hover: #2d4a3a;
