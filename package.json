@@ -10,6 +10,8 @@
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
+    "corpus:promote": "node scripts/promote-corpus.mjs",
+    "corpus:check": "node scripts/corpus-check.mjs",
     "yisu:manifest": "node scripts/yisu-data.mjs manifest",
     "yisu:convert": "node scripts/yisu-data.mjs convert",
     "yisu:audit": "node scripts/yisu-data.mjs audit"
