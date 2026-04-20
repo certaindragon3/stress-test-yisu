@@ -13,9 +13,9 @@
 ## Verification script
 
 For each chip in `[Prompting is the new literacy., AI tutors will
-replace TAs within five years., Students who don't use AI will fall
-behind., The essay is dead., Teachers should ban AI to preserve
-learning.]`:
+replace TAs within five years., AI tutors help students learn more in
+less time., The essay is dead., Teachers must not let AI substitute
+for teaching.]`:
 
 1. **Navigate** to `http://localhost:3000`.
 

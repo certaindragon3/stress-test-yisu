@@ -6,9 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 const EXAMPLE_CLAIMS = [
   "Prompting is the new literacy.",
   "AI tutors will replace TAs within five years.",
-  "Students who don't use AI will fall behind.",
+  "AI tutors help students learn more in less time.",
   "The essay is dead.",
-  "Teachers should ban AI to preserve learning.",
+  "Teachers must not let AI substitute for teaching.",
 ];
 
 export function ClaimInput({

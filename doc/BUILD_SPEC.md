@@ -225,14 +225,17 @@ variable. No other secrets.
 
 ## 11. Example claims (seed the chips)
 
-These are five claims Yisu has endorsed as worth pressing. Final list to
-be confirmed with him in the co-design meeting.
+These are five chip-seed claims — three drawn from the *Software 3.0
+University* keynote's framing, two sharpened against live public
+AI-education discourse (see `doc/phase-1/claim-bank.md` for sources
+and axis hooks). Final list to be confirmed with Yisu in the co-design
+meeting.
 
 - *"Prompting is the new literacy."*
 - *"AI tutors will replace TAs within five years."*
-- *"Students who don't use AI will fall behind."*
+- *"AI tutors help students learn more in less time."*
 - *"The essay is dead."*
-- *"Teachers should ban AI to preserve learning."*
+- *"Teachers must not let AI substitute for teaching."*
 
 ## 12. Completion criteria
 

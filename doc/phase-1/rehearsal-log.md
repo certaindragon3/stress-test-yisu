@@ -49,7 +49,7 @@ Chip subtotal: `A=__  V=__  rate=__%`
 
 Chip subtotal: `A=__  V=__  rate=__%`
 
-### Chip 3 — "Students who don't use AI will fall behind."
+### Chip 3 — "AI tutors help students learn more in less time."
 
 | # | B | V | A | Honest? | Notes |
 |---|---|---|---|---------|-------|
@@ -73,7 +73,7 @@ Chip subtotal: `A=__  V=__  rate=__%`
 
 Chip subtotal: `A=__  V=__  rate=__%`
 
-### Chip 5 — "Teachers should ban AI to preserve learning."
+### Chip 5 — "Teachers must not let AI substitute for teaching."
 
 | # | B | V | A | Honest? | Notes |
 |---|---|---|---|---------|-------|
