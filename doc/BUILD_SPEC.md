@@ -42,6 +42,12 @@ This instrument answers it by being:
 - **Grounded, not generative.** Every quotation the instrument produces
   must be verbatim from Yisu's corpus. Paraphrase-as-quotation is
   forbidden. A small verification layer enforces this.
+- **Broadly grounded, not single-source.** The instrument may begin
+  from the *Software 3.0 University* keynote, but it must not collapse
+  every AI-education claim back onto that one essay by default. Where
+  Yisu's corpus honestly supports it, the three axes should draw from
+  different regions of the corpus so that the reading reflects the
+  breadth of his frame rather than only his one AI-native text.
 - **Authored, not assembled.** The system prompt is an authored artifact
   in its own right. The demo makes it visible: the prompt is projected
   on screen, and three specific clauses are read aloud as the site of
@@ -95,7 +101,10 @@ One view. No routes.
 3. The instrument streams four sections in order: three axes, then the
    final question. Each section's header appears first, then its prose
    streams in below it, then its supporting quotation fades in once the
-   verification check passes.
+   verification check passes. When more than one essay honestly fits,
+   the reading should not visibly degenerate into three quotations from
+   the same source unless that repetition is genuinely the strongest
+   available grounding.
 4. When streaming completes, a subtle `Press again ↑` link appears at
    the bottom. There is no "share" button, no "export" button, no
    "history" panel. One press, one reading.
@@ -109,7 +118,7 @@ One view. No routes.
 | Styling      | **Tailwind CSS v4**                          | Utility-first; no design tokens outside the palette above.         |
 | Components   | **shadcn/ui** (Button, Textarea, Badge only) | Pre-installed via MCP. No other primitives needed.                 |
 | AI SDK       | **Vercel AI SDK v5** (`streamText`)          | Cleanest streaming primitive for Google Gemini.                    |
-| Model        | **`gemini-3.1-pro-preview`**                 | Right balance of quality and latency for a live demo.              |
+| Model        | **Gemini family, implementation-chosen**     | Pick the Gemini variant that best satisfies latency, quote fidelity, and robust multi-source retrieval on the deployed site. |
 | Deployment   | **Cloudflare Workers** via `@opennextjs/cloudflare` | Next 16 compatible; `next-on-pages` is in maintenance mode. |
 | Domain       | **`stress-test.jiesen-huang.com`**           | Locked 24 hours before the demo. No changes after.                 |
 | Font loading | `next/font/google` for EB Garamond           | Self-hosted, no FOUT.                                              |
@@ -132,7 +141,8 @@ any ORM, any auth provider.
            ▼
 ┌─────────────────────┐
 │  app/api/press/     │  Route Handler. Assembles system prompt +
-│  route.ts           │  corpus, calls streamText, returns a stream.
+│  route.ts           │  retrieved verbatim corpus context, calls
+│                     │  streamText, returns a stream.
 └──────────┬──────────┘
            │
            ▼
@@ -147,7 +157,7 @@ any ORM, any auth provider.
 ```
 
 The response is a **structured stream**. The instrument uses Vercel AI
-SDK's `streamObject` pattern so each of the four sections arrives as a
+SDK's structured-output path so each of the four sections arrives as a
 typed partial:
 
 ```ts
@@ -178,6 +188,17 @@ If a quote fails verification, the UI renders the quote block with a
 muted `unverified — not rendered` placeholder, and the quote text itself
 is dropped. This is a trust commitment, not a nicety: in the demo, Yisu
 is in the room and will spot a fabricated citation instantly.
+
+Verification is a floor, not the whole requirement. The visible
+`quote.source` caption must also correspond to a source that can be
+resolved by the provenance layer. A fast retrieval path that produces
+real substrings but misleading source labels does not satisfy the spec.
+
+Likewise, retrieval is not judged only by speed. A performance
+optimization that repeatedly narrows the reading back to a single essay
+title, especially *Software 3.0 and the Future of the Academy*, counts
+as a regression if the broader corpus honestly supports more distributed
+grounding across the three axes.
 
 ## 9. File structure
 
@@ -248,12 +269,19 @@ The build is **done for demo** when all of the following hold:
 3. Every quotation rendered in the final output carries the `✓ verified`
    badge. Zero unverified quotes appear on screen during any of the
    five rehearsal runs.
-4. The final question always arrives as a **single sentence**, in
+4. Across the same rehearsal runs, the reading does not systematically
+   collapse into a single repeated essay title when the corpus supports
+   broader grounding. The intended shape is that the suite regularly
+   surfaces at least two distinct essay titles across a reading's three
+   axis quotes, and often three.
+5. The source caption under a verified quotation is consistent with the
+   provenance drawer's resolved source for that quotation.
+6. The final question always arrives as a **single sentence**, in
    italics, at a size that occupies roughly the viewport's vertical
    center on a 1920×1080 projector.
-5. The page passes a "scroll test at 10 feet": read aloud from ten feet
+7. The page passes a "scroll test at 10 feet": read aloud from ten feet
    away from a 13" laptop, every line is legible.
-6. A pre-recorded 90-second fallback video is saved locally on the demo
+8. A pre-recorded 90-second fallback video is saved locally on the demo
    laptop and can be triggered by a single keystroke if the live
    instrument fails.
 

@@ -1,94 +1,165 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { experimental_useObject as useObject } from "@ai-sdk/react";
 
 import { AxisSection } from "@/components/axis-section";
 import { ClaimInput } from "@/components/claim-input";
 import { FinalQuestion } from "@/components/final-question";
-import { ReadingSchema } from "@/lib/schema";
+import {
+  createPendingVerifications,
+  mergeReading,
+  type PartialReading,
+  type PressStreamEvent,
+  type VerificationMap,
+} from "@/lib/press-stream";
 
-type Verification = "pending" | "verified" | "unverified";
+type StreamError = Error | null;
 
-type AxisKey = "epistemological" | "mastery" | "jurisdictional";
-
-const AXES: { key: AxisKey; numeral: string; title: string }[] = [
+const AXES = [
   { key: "epistemological", numeral: "I", title: "The Epistemological Axis" },
   { key: "mastery", numeral: "II", title: "The Mastery Pipeline" },
   { key: "jurisdictional", numeral: "III", title: "The Jurisdictional Move" },
-];
+] as const;
 
-async function verify(text: string): Promise<boolean> {
-  const res = await fetch("/api/verify", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ text }),
-  });
-  if (!res.ok) return false;
-  const data = (await res.json()) as { verified: boolean };
-  return data.verified;
+function toError(message: string): Error {
+  return new Error(message || "The instrument failed to respond.");
+}
+
+function parseEvents(buffer: string): {
+  rest: string;
+  events: PressStreamEvent[];
+} {
+  const events: PressStreamEvent[] = [];
+  let cursor = 0;
+
+  while (true) {
+    const newlineIndex = buffer.indexOf("\n", cursor);
+    if (newlineIndex < 0) {
+      return { rest: buffer.slice(cursor), events };
+    }
+
+    const line = buffer.slice(cursor, newlineIndex).trim();
+    cursor = newlineIndex + 1;
+    if (!line) continue;
+    events.push(JSON.parse(line) as PressStreamEvent);
+  }
 }
 
 export default function Page() {
   const [claim, setClaim] = useState("");
   const [hasPressed, setHasPressed] = useState(false);
-  const [verifications, setVerifications] = useState<
-    Record<AxisKey, Verification>
-  >({
-    epistemological: "pending",
-    mastery: "pending",
-    jurisdictional: "pending",
-  });
-  const verifiedFor = useRef<Record<AxisKey, string | null>>({
-    epistemological: null,
-    mastery: null,
-    jurisdictional: null,
-  });
+  const [reading, setReading] = useState<PartialReading>({});
+  const [verifications, setVerifications] = useState<VerificationMap>(
+    createPendingVerifications(),
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<StreamError>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
-  const { object, submit, isLoading, error } = useObject({
-    api: "/api/press",
-    schema: ReadingSchema,
-  });
-
-  // Once streaming is done, verify each axis's quote against the corpus.
   useEffect(() => {
-    if (isLoading || !object) return;
-    AXES.forEach(({ key }) => {
-      const q = object[key]?.quote;
-      const text = q?.text;
-      if (!text) {
-        if (verifiedFor.current[key] !== "__none__") {
-          verifiedFor.current[key] = "__none__";
-          setVerifications((v) => ({ ...v, [key]: "verified" }));
-        }
-        return;
-      }
-      if (verifiedFor.current[key] === text) return;
-      verifiedFor.current[key] = text;
-      setVerifications((v) => ({ ...v, [key]: "pending" }));
-      verify(text).then((ok) => {
-        setVerifications((v) => ({
-          ...v,
-          [key]: ok ? "verified" : "unverified",
-        }));
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, []);
+
+  function resetStreamState() {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    setReading({});
+    setVerifications(createPendingVerifications());
+    setError(null);
+    setIsLoading(false);
+  }
+
+  async function streamPress(nextClaim: string) {
+    const controller = new AbortController();
+    abortRef.current = controller;
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/press", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ claim: nextClaim }),
+        signal: controller.signal,
       });
-    });
-  }, [isLoading, object]);
+
+      if (!res.ok || !res.body) {
+        throw toError(`The instrument failed to respond. ${res.status}`);
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let finished = false;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const parsed = parseEvents(buffer);
+        buffer = parsed.rest;
+
+        for (const event of parsed.events) {
+          if (event.type === "error") {
+            throw toError(event.message);
+          }
+
+          setReading((current) => mergeReading(current, event.reading));
+          setVerifications(event.verifications);
+
+          if (event.type === "finish") {
+            finished = true;
+            setIsLoading(false);
+          }
+        }
+      }
+
+      buffer += decoder.decode();
+      const parsed = parseEvents(buffer);
+      for (const event of parsed.events) {
+        if (event.type === "error") {
+          throw toError(event.message);
+        }
+        setReading((current) => mergeReading(current, event.reading));
+        setVerifications(event.verifications);
+        if (event.type === "finish") {
+          finished = true;
+        }
+      }
+
+      if (!finished && !controller.signal.aborted) {
+        setIsLoading(false);
+      }
+    } catch (streamError) {
+      if (controller.signal.aborted) return;
+      setError(
+        streamError instanceof Error
+          ? streamError
+          : toError("The instrument failed to respond."),
+      );
+      setIsLoading(false);
+    } finally {
+      if (abortRef.current === controller) {
+        abortRef.current = null;
+      }
+    }
+  }
 
   function handlePress() {
-    if (claim.trim().length === 0) return;
+    const nextClaim = claim.trim();
+    if (nextClaim.length === 0) return;
+
     setHasPressed(true);
-    setVerifications({
-      epistemological: "pending",
-      mastery: "pending",
-      jurisdictional: "pending",
-    });
-    verifiedFor.current = {
-      epistemological: null,
-      mastery: null,
-      jurisdictional: null,
-    };
-    submit({ claim: claim.trim() });
+    resetStreamState();
+    void streamPress(nextClaim);
+  }
+
+  function handlePressAgain() {
+    resetStreamState();
+    setHasPressed(false);
+    setClaim("");
   }
 
   return (
@@ -122,8 +193,8 @@ export default function Page() {
               key={key}
               numeral={numeral}
               title={title}
-              prose={object?.[key]?.prose}
-              quote={object?.[key]?.quote ?? null}
+              prose={reading[key]?.prose}
+              quote={reading[key]?.quote ?? null}
               verification={verifications[key]}
             />
           ))}
@@ -134,15 +205,12 @@ export default function Page() {
               A Question Yisu Might Ask in Response
             </h2>
           </div>
-          <FinalQuestion question={object?.question} />
+          <FinalQuestion question={reading.question} />
 
-          {!isLoading && object?.question ? (
+          {!isLoading && reading.question ? (
             <button
               type="button"
-              onClick={() => {
-                setHasPressed(false);
-                setClaim("");
-              }}
+              onClick={handlePressAgain}
               className="small-caps text-xs text-neutral-500 hover:text-ink"
             >
               Press again ↑

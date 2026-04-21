@@ -56,7 +56,12 @@ declaring a phase done, the `closeout.md` script must pass end-to-end.
 | 0 | Scaffold | shipped | [`doc/phase-0/epic.md`](./doc/phase-0/epic.md), [`doc/phase-0/closeout.md`](./doc/phase-0/closeout.md) |
 | 1 | Corpus landing | pending corpus review | [`doc/phase-1/epic.md`](./doc/phase-1/epic.md), [`doc/phase-1/closeout.md`](./doc/phase-1/closeout.md) |
 | 2 | Provenance drawer | shipped | [`doc/phase-2/epic.md`](./doc/phase-2/epic.md), [`doc/phase-2/closeout.md`](./doc/phase-2/closeout.md) |
-| 3 | Demo readiness (Cloudflare + fallback) | not started | [`doc/phase-3/epic.md`](./doc/phase-3/epic.md), [`doc/phase-3/closeout.md`](./doc/phase-3/closeout.md) |
+| 3 | Demo readiness (Cloudflare + fallback) | in progress | [`doc/phase-3/epic.md`](./doc/phase-3/epic.md), [`doc/phase-3/closeout.md`](./doc/phase-3/closeout.md), [`doc/phase-3/deploy-runbook.md`](./doc/phase-3/deploy-runbook.md) |
+| 4 | Performance hardening | planned | [`doc/phase-4/epic.md`](./doc/phase-4/epic.md), [`doc/phase-4/closeout.md`](./doc/phase-4/closeout.md) |
+
+Phase 4 was opened because the deployed instrument currently misses the
+Phase 3 press-latency budget. Phase 3 remains the demo-readiness gate;
+Phase 4 is the dedicated performance workstream required to unblock it.
 
 Phase 2 is settled to be an **inline drawer on the same page**, not a
 parallel route. The "one screen, one voice" invariant is load-bearing;
