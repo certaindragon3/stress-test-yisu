@@ -62,9 +62,10 @@ fabricated quote can ever reach the page — the system prompt and
 - `gemini-3.1-pro-preview` may change behavior or be sunset before the
   forum. If structured output regresses, fall back to `gemini-2.5-pro`
   by editing `MODEL_ID` in `app/api/press/route.ts`.
-- The `runtime = "nodejs"` choice on the API routes is incompatible
-  with `@cloudflare/next-on-pages`. Phase 3 must convert the corpus to
-  a build-time-generated TypeScript string and switch to Edge runtime.
+- Phase 3 must convert the corpus to a build-time-generated TypeScript
+  string and deploy through `@opennextjs/cloudflare`, which keeps the
+  API routes on Next's supported Node.js runtime inside Cloudflare
+  Workers.
 
 ## Reference
 

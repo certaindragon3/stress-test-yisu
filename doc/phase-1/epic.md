@@ -16,19 +16,22 @@ falsely rejected.
 
 ## Current status
 
-As of 2026-04-20, the corpus has been expanded to 10 reviewed pieces:
-the original seven plus `xinrui-weekly-2023-year-end-questionnaire.md`,
+As of April 20, 2026, the corpus has been expanded to 10 reviewed
+pieces: the original seven plus
+`xinrui-weekly-2023-year-end-questionnaire.md`,
 `beijing-news-2020-interview-outline.md`, and
 `what-kind-of-high-school-what-kind-of-education.md`. The expansion is
 targeted at the current chip set's weak spots: ChatGPT and machine
 knowing, data-driven claims about learning, RCT-to-policy extrapolation,
 and skill formation.
 
-An API smoke test against `next start` on port 3001 produced 15 attempted
-quotes across the five chip claims, with 13 passing verification
-(`86.7%`). This clears the Phase 1 rate threshold as a preliminary
-signal, but it is not a replacement for the full 25-press browser
-closeout in `closeout.md`.
+A one-press-per-chip API smoke test against `next start` on port 3001
+produced 15 attempted quotes across the five chip claims, with 13
+passing verification (`86.7%`). That rehearsal signal was then followed
+by the formal 25-press browser closeout in `closeout.md`: 75 attempted
+quotes, 70 verified, `93.3%` verification rate, zero rendered
+unverified blockquotes, and zero final-question sentence failures.
+Phase 1 acceptance criteria now pass.
 
 ## In scope
 
@@ -92,11 +95,11 @@ closeout in `closeout.md`.
 - **Smart-quote drift.** Markdown editors and Pandoc both like to
   rewrite quotes. The normalization layer must run before substring
   match; add tests for `" "` and `' '` round-trips.
-- **Smoke test is not closeout.** The current API smoke test establishes
-  that the corpus expansion moved the hit rate in the right direction.
-  Phase 1 is not formally complete until the browser-driven 25-press
-  closeout verifies rendered blockquotes, `✓ verified` badges, and
-  one-sentence final questions end-to-end.
+- **Closeout drift.** The current chip set passes closeout on April 20,
+  2026. Any later prompt edits, corpus additions, model changes, or
+  deployment-path differences should be treated as potentially
+  destabilizing and re-run against the same closeout script before
+  being trusted on stage.
 
 ## Reference
 

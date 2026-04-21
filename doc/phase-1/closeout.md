@@ -57,6 +57,22 @@ After all five chips:
 - Aggregate verification rate ≥ 80%.
 - Trust floor: zero unverified blockquotes rendered.
 
+## Result
+
+Closed out on April 20, 2026.
+
+- Browser path: local `pnpm dev` on `http://localhost:3000`
+- Automation: `agent-browser` browser session, with CDP fallback for the
+  25-press loop after long-running daemon reads became intermittently
+  unavailable
+- Total quotes attempted: `75`
+- Total quotes verified/rendered: `70`
+- Verification rate: `93.3%`
+- Rendered unverified blockquotes: `0`
+- Final questions violating the one-sentence rule: `0`
+
+Outcome: **pass**
+
 ## Known limitations carried forward
 
 - Cloudflare deployment still pending (Phase 3).

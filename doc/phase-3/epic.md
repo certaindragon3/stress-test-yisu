@@ -13,21 +13,29 @@ the demo laptop in case the live instrument fails on stage.
 ## In scope
 
 - Build-time corpus baking. A new script `scripts/bundle-corpus.mjs`
-  walks `content/corpus/*.md`, concatenates them into a single
-  TypeScript module `lib/corpus.generated.ts`, and writes a
-  `CORPUS_SOURCES` map (filename → essay-title) for `/api/provenance`.
-  `lib/corpus.ts` re-exports from the generated file. `pnpm build`
+  walks `content/corpus/*.md` and emits a single TypeScript module
+  `lib/corpus.generated.ts` that exports both `YISU_CORPUS` (the
+  concatenated string with `<!-- file: ... -->` markers) and a
+  `CORPUS_SOURCES` array of `{ filename, title, body }` records so
+  `/api/provenance` can compute match offsets against the original
+  file body without touching the filesystem. `lib/corpus.ts` and
+  `lib/provenance.ts` consume the generated module. `pnpm build`
   runs the bundler in a `prebuild` hook.
-- Switch `app/api/press/route.ts` and `app/api/verify/route.ts` to
-  `export const runtime = "edge"` once the corpus is no longer
-  filesystem-loaded. Same for `/api/provenance`.
-- `next.config.mjs`: integrate `@cloudflare/next-on-pages` per
-  BUILD_SPEC §13.
-- `wrangler.toml` checked in with the project name and the
-  `GEMINI_API_KEY` declared as a required env var (value not
-  committed).
-- Cloudflare Pages project created. `stress-test.jiesen-huang.com`
-  bound to `stress-tester.pages.dev` via the dashboard.
+- Keep `app/api/press/route.ts`, `app/api/verify/route.ts`, and
+  `app/api/provenance/route.ts` on `export const runtime = "nodejs"`.
+  `@opennextjs/cloudflare` does not currently support Next's
+  `runtime = "edge"` path, so the supported deployment target is the
+  Cloudflare Worker adapter running Next's Node.js runtime. Drop the
+  Vercel-only `maxDuration` export from the press route.
+- `next.config.mjs` + `open-next.config.ts`: integrate
+  `@opennextjs/cloudflare` per BUILD_SPEC §13. `next-on-pages` is
+  rejected on Next 16 compatibility grounds.
+- `wrangler.toml` checked in with the Worker name, `main`,
+  `compatibility_date`, and `GEMINI_API_KEY` declared as a required
+  secret (value not committed).
+- Cloudflare Workers project deployed as `stress-tester`.
+  `stress-test.jiesen-huang.com` bound as a Worker Custom Domain via
+  the dashboard.
 - Pre-recorded fallback video at
   `~/Demo/stress-tester-fallback.mp4`, 90 seconds, 1080p, with audio
   off. Triggered by a single keystroke (e.g. a Keyboard Maestro macro
@@ -44,8 +52,8 @@ the demo laptop in case the live instrument fails on stage.
 
 ## Acceptance criteria
 
-1. `pnpm build && pnpm dlx @cloudflare/next-on-pages` succeeds and
-   `wrangler pages deploy .vercel/output/static` deploys cleanly.
+1. `pnpm build && pnpm opennextjs-cloudflare build` succeeds and
+   `pnpm wrangler deploy` deploys cleanly.
 2. `https://stress-test.jiesen-huang.com` returns 200 and renders the
    form within 1.5s on the venue network (BUILD_SPEC §12.1), measured
    24 hours before the panel.
@@ -61,16 +69,15 @@ the demo laptop in case the live instrument fails on stage.
    §12.5).
 7. The fallback video plays on the first keystroke of the bound
    shortcut, full-screen, in under 1 second (BUILD_SPEC §12.6).
-8. The Cloudflare Edge runtime build does not break Phase 2's
+8. The Cloudflare Workers build does not break Phase 2's
    provenance drawer.
 
 ## Open questions / risks
 
-- **Edge runtime + AI SDK compatibility.** Verify that `streamObject`
-  with `@ai-sdk/google` runs on Cloudflare Workers' V8 isolate. If
-  not, fall back to `runtime = "nodejs"` and accept the cold-start
-  cost, or self-host on a Vercel project (not Cloudflare) with same
-  domain via DNS.
+- **OpenNext runtime support.** `@opennextjs/cloudflare` currently
+  requires Next's Node.js runtime on Cloudflare Workers. Do not add
+  `runtime = "edge"` to any route unless OpenNext's official docs
+  change; doing so will break the supported deployment path.
 - **Venue network firewall.** Some auditorium networks block outbound
   to `generativelanguage.googleapis.com`. Test 24h in advance from
   the auditorium itself; if blocked, request a network exception or

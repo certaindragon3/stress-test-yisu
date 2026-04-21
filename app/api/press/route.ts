@@ -5,10 +5,11 @@ import { YISU_CORPUS } from "@/lib/corpus";
 import { ReadingSchema } from "@/lib/schema";
 import { buildSystemPrompt } from "@/lib/system-prompt";
 
-export const runtime = "nodejs";
-export const maxDuration = 60;
+const MODEL_ID = "gemini-3-flash-preview";
 
-const MODEL_ID = "gemini-3.1-pro-preview";
+// OpenNext's Cloudflare adapter currently supports Next's Node.js runtime,
+// not `runtime = "edge"`, so keep the route explicit.
+export const runtime = "nodejs";
 
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY,

@@ -38,6 +38,52 @@ source piece is Chinese. A Chinese quotation inside an English reading
 is honest; a translated quotation is a fabrication.
 
 ─────────────────────────────────────────────────────────────────────
+CORPUS ORIENTATION
+
+The corpus spans ten essays. Only one of them — *Software 3.0 and the
+Future of the Academy* — is directly about AI. The other nine are
+about education: vocational training and apprenticeship, the political
+economy of schooling, the education market, the modern university,
+meritocracy, the high-school system, and two extended interviews. An
+AI-related claim will pull you toward the single AI-native essay. That
+pull is a trap. Yisu's *judgment* on AI is concentrated in one essay;
+Yisu's *analytical frame* — the categories through which an AI claim
+must actually be pressed — is distributed across the other nine.
+
+Expect the three axes to draw on different regions of the corpus:
+
+  - Axis I (Epistemological) finds its most direct support in
+    *Software 3.0 and the Future of the Academy*, where the
+    verifiability/novelty distinction is named. Occasionally
+    *Education Technology: Prospects and Challenges* speaks to the
+    same register.
+
+  - Axis II (Mastery Pipeline) is usually better supported by Yisu's
+    writings on skill formation than by the AI essay itself. See
+    *The Political Economy of Vocational Education*, *Fruits of
+    Opportunism*, *What Kind of High School, What Kind of Education*,
+    and *Meritocracy's Disguise*. The ramen-chef logic — apprentices,
+    reps, tacit judgment, training grounds — is discussed in these
+    essays in its own terms, often more densely than in the AI essay.
+
+  - Axis III (Jurisdictional Move) is usually best supported by
+    Yisu's writings on institutions and the education market. See
+    *The Political Sociology of the Education Market*, *Knowledge
+    Exchange and the Modern University*, *Beijing News 2020 Interview
+    Outline*, and *Xinrui Weekly 2023 Year-End Questionnaire*. These
+    essays are where "whose turf, under what authority, with what
+    silencing" is the explicit question.
+
+An AI claim often finds its sharpest test not in Yisu's essay about
+AI, but in his essays about the structures AI proposes to disrupt.
+Where the corpus honestly allows it, prefer to draw the three
+supporting quotations from three distinct source files, so that the
+reading reflects the breadth of Yisu's frame and not only his one
+direct commentary on AI. This is a preference, not an override: Rule 3
+and Rule 1 still govern. If the honest answer is that two axes land
+most precisely in the same essay, so be it — never fabricate breadth.
+
+─────────────────────────────────────────────────────────────────────
 THE OPERATION
 
 Given a claim about AI and education, produce a reading with exactly

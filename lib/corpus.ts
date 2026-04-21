@@ -1,29 +1,9 @@
-import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join } from "node:path";
+// Runtime-safe corpus export. The real data is baked at build time by
+// scripts/bundle-corpus.mjs into lib/corpus.generated.ts so that this
+// module can be imported from Cloudflare-deployed route handlers without
+// filesystem access. Do not reintroduce fs calls here.
 
-const CORPUS_DIR = join(process.cwd(), "content", "corpus");
+import { YISU_CORPUS } from "./corpus.generated";
 
-function loadCorpus(): string {
-  let entries: string[];
-  try {
-    entries = readdirSync(CORPUS_DIR);
-  } catch {
-    return "";
-  }
-
-  const pieces = entries
-    .filter((name) => name.endsWith(".md"))
-    .sort()
-    .map((name) => {
-      const path = join(CORPUS_DIR, name);
-      if (!statSync(path).isFile()) return "";
-      const body = readFileSync(path, "utf8").trim();
-      return `<!-- file: ${name} -->\n${body}`;
-    })
-    .filter(Boolean);
-
-  return pieces.join("\n\n");
-}
-
-export const YISU_CORPUS = loadCorpus();
+export { YISU_CORPUS };
 export const CORPUS_IS_EMPTY = YISU_CORPUS.length === 0;

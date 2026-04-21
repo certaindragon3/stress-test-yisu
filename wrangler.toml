@@ -1,0 +1,15 @@
+name = "stress-tester"
+main = ".open-next/worker.js"
+compatibility_date = "2025-09-01"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+
+# Static assets emitted by @opennextjs/cloudflare.
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+# Required secret:
+#   pnpm wrangler secret put GEMINI_API_KEY
+#
+# Optional local dev env (.dev.vars, gitignored):
+#   GEMINI_API_KEY="..."

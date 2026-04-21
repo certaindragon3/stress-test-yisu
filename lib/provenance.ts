@@ -1,39 +1,12 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join } from "node:path";
-
+import { CORPUS_SOURCES, type CorpusSource } from "./corpus.generated";
 import { normalize } from "./verify";
 
-const CORPUS_DIR = join(process.cwd(), "content", "corpus");
 const CONTEXT_PARAGRAPHS = 3;
 
-type CorpusEntry = { filename: string; title: string; body: string };
+type CorpusEntry = CorpusSource;
 
-let indexCache: CorpusEntry[] | null = null;
-
-function loadIndex(): CorpusEntry[] {
-  if (indexCache) return indexCache;
-  let entries: string[];
-  try {
-    entries = readdirSync(CORPUS_DIR);
-  } catch {
-    indexCache = [];
-    return indexCache;
-  }
-
-  indexCache = entries
-    .filter((name) => name.endsWith(".md"))
-    .sort()
-    .map<CorpusEntry | null>((name) => {
-      const path = join(CORPUS_DIR, name);
-      if (!statSync(path).isFile()) return null;
-      const body = readFileSync(path, "utf8");
-      const match = /^#\s+(.+?)\s*$/m.exec(body);
-      if (!match) return null;
-      return { filename: name, title: match[1], body };
-    })
-    .filter((v): v is CorpusEntry => v !== null);
-
-  return indexCache;
+function loadIndex(): readonly CorpusEntry[] {
+  return CORPUS_SOURCES;
 }
 
 export function resolveSource(

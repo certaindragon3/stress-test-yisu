@@ -109,8 +109,8 @@ One view. No routes.
 | Styling      | **Tailwind CSS v4**                          | Utility-first; no design tokens outside the palette above.         |
 | Components   | **shadcn/ui** (Button, Textarea, Badge only) | Pre-installed via MCP. No other primitives needed.                 |
 | AI SDK       | **Vercel AI SDK v5** (`streamText`)          | Cleanest streaming primitive for Google Gemini.                    |
-| Model        | **`gemini-3.1-pro`**                         | Right balance of quality and latency for a live demo.              |
-| Deployment   | **Cloudflare Pages** via `@cloudflare/next-on-pages` | Author already operates this domain.                       |
+| Model        | **`gemini-3.1-pro-preview`**                 | Right balance of quality and latency for a live demo.              |
+| Deployment   | **Cloudflare Workers** via `@opennextjs/cloudflare` | Next 16 compatible; `next-on-pages` is in maintenance mode. |
 | Domain       | **`stress-test.jiesen-huang.com`**           | Locked 24 hours before the demo. No changes after.                 |
 | Font loading | `next/font/google` for EB Garamond           | Self-hosted, no FOUT.                                              |
 
@@ -220,7 +220,7 @@ stress-tester/
 GEMINI_API_KEY=...
 ```
 
-The Cloudflare Pages project binds the same key as an environment
+The Cloudflare Workers project binds the same key as an environment
 variable. No other secrets.
 
 ## 11. Example claims (seed the chips)
@@ -268,17 +268,19 @@ cp .env.local.example .env.local  # paste GEMINI_API_KEY
 # local dev
 pnpm dev
 
-# production build
-pnpm build
-pnpm dlx @cloudflare/next-on-pages
+# local preview of the Workers bundle (after corpus bake)
+pnpm cf:preview
 
 # deploy
-wrangler pages deploy .vercel/output/static \
-  --project-name=stress-tester \
-  --branch=main
+pnpm cf:build
+pnpm cf:dry-run
+pnpm wrangler deploy
+
+# set production secret (one-time)
+pnpm wrangler secret put GEMINI_API_KEY
 
 # bind domain (one-time, via Cloudflare dashboard)
-# stress-test.jiesen-huang.com → stress-tester.pages.dev
+# stress-test.jiesen-huang.com → stress-tester Worker (Custom Domains)
 ```
 
 ## 14. What this build is *not*
