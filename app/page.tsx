@@ -18,9 +18,27 @@ type StreamError = Error | null
 type MotionPhase = "idle" | "arming" | "waiting" | "streaming" | "complete"
 
 const AXES = [
-  { key: "epistemological", numeral: "I", title: "The Epistemological Axis" },
-  { key: "mastery", numeral: "II", title: "The Mastery Pipeline" },
-  { key: "jurisdictional", numeral: "III", title: "The Jurisdictional Move" },
+  {
+    key: "epistemological",
+    numeral: "I",
+    title: "The Epistemological Axis",
+    subtitle:
+      "Is this claim about questions with checkable answers, or judgments that still depend on people?",
+  },
+  {
+    key: "mastery",
+    numeral: "II",
+    title: "The Mastery Pipeline",
+    subtitle:
+      "What training does this make the next generation skip before judgment can form?",
+  },
+  {
+    key: "jurisdictional",
+    numeral: "III",
+    title: "The Jurisdictional Move",
+    subtitle:
+      "Whose professional work is being reassigned here, and who gains by that move?",
+  },
 ] as const
 
 function toError(message: string): Error {
@@ -234,12 +252,13 @@ export default function Page() {
             active={motionPhase === "arming" || motionPhase === "waiting"}
           />
 
-          {AXES.map(({ key, numeral, title }, index) => (
+          {AXES.map(({ key, numeral, title, subtitle }, index) => (
             <AxisSection
               key={key}
               index={index}
               numeral={numeral}
               title={title}
+              subtitle={subtitle}
               prose={reading[key]?.prose}
               quote={reading[key]?.quote ?? null}
               verification={verifications[key]}
