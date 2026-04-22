@@ -1,80 +1,100 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react"
 
-import { AxisSection } from "@/components/axis-section";
-import { ClaimInput } from "@/components/claim-input";
-import { FinalQuestion } from "@/components/final-question";
+import { AxisSection } from "@/components/axis-section"
+import { ClaimInput } from "@/components/claim-input"
+import { FinalQuestion } from "@/components/final-question"
+import { LoadingBridge } from "@/components/loading-bridge"
 import {
   createPendingVerifications,
   mergeReading,
   type PartialReading,
   type PressStreamEvent,
   type VerificationMap,
-} from "@/lib/press-stream";
+} from "@/lib/press-stream"
 
-type StreamError = Error | null;
+type StreamError = Error | null
+type MotionPhase = "idle" | "arming" | "waiting" | "streaming" | "complete"
 
 const AXES = [
   { key: "epistemological", numeral: "I", title: "The Epistemological Axis" },
   { key: "mastery", numeral: "II", title: "The Mastery Pipeline" },
   { key: "jurisdictional", numeral: "III", title: "The Jurisdictional Move" },
-] as const;
+] as const
 
 function toError(message: string): Error {
-  return new Error(message || "The instrument failed to respond.");
+  return new Error(message || "The instrument failed to respond.")
 }
 
 function parseEvents(buffer: string): {
-  rest: string;
-  events: PressStreamEvent[];
+  rest: string
+  events: PressStreamEvent[]
 } {
-  const events: PressStreamEvent[] = [];
-  let cursor = 0;
+  const events: PressStreamEvent[] = []
+  let cursor = 0
 
   while (true) {
-    const newlineIndex = buffer.indexOf("\n", cursor);
+    const newlineIndex = buffer.indexOf("\n", cursor)
     if (newlineIndex < 0) {
-      return { rest: buffer.slice(cursor), events };
+      return { rest: buffer.slice(cursor), events }
     }
 
-    const line = buffer.slice(cursor, newlineIndex).trim();
-    cursor = newlineIndex + 1;
-    if (!line) continue;
-    events.push(JSON.parse(line) as PressStreamEvent);
+    const line = buffer.slice(cursor, newlineIndex).trim()
+    cursor = newlineIndex + 1
+    if (!line) continue
+    events.push(JSON.parse(line) as PressStreamEvent)
   }
 }
 
+function hasVisibleReading(reading: PartialReading): boolean {
+  if (reading.question?.trim()) {
+    return true
+  }
+
+  return AXES.some(({ key }) => {
+    const axis = reading[key]
+    return Boolean(
+      axis?.prose?.trim() ||
+      axis?.quote?.text?.trim() ||
+      axis?.quote?.source?.trim()
+    )
+  })
+}
+
 export default function Page() {
-  const [claim, setClaim] = useState("");
-  const [hasPressed, setHasPressed] = useState(false);
-  const [reading, setReading] = useState<PartialReading>({});
+  const [claim, setClaim] = useState("")
+  const [hasPressed, setHasPressed] = useState(false)
+  const [reading, setReading] = useState<PartialReading>({})
   const [verifications, setVerifications] = useState<VerificationMap>(
-    createPendingVerifications(),
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<StreamError>(null);
-  const abortRef = useRef<AbortController | null>(null);
+    createPendingVerifications()
+  )
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<StreamError>(null)
+  const [motionPhase, setMotionPhase] = useState<MotionPhase>("idle")
+  const abortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     return () => {
-      abortRef.current?.abort();
-    };
-  }, []);
+      abortRef.current?.abort()
+    }
+  }, [])
 
   function resetStreamState() {
-    abortRef.current?.abort();
-    abortRef.current = null;
-    setReading({});
-    setVerifications(createPendingVerifications());
-    setError(null);
-    setIsLoading(false);
+    abortRef.current?.abort()
+    abortRef.current = null
+    setReading({})
+    setVerifications(createPendingVerifications())
+    setError(null)
+    setIsLoading(false)
+    setMotionPhase("idle")
   }
 
   async function streamPress(nextClaim: string) {
-    const controller = new AbortController();
-    abortRef.current = controller;
-    setIsLoading(true);
+    const controller = new AbortController()
+    abortRef.current = controller
+    setIsLoading(true)
+    let currentReading: PartialReading = {}
 
     try {
       const res = await fetch("/api/press", {
@@ -82,84 +102,105 @@ export default function Page() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ claim: nextClaim }),
         signal: controller.signal,
-      });
+      })
 
       if (!res.ok || !res.body) {
-        throw toError(`The instrument failed to respond. ${res.status}`);
+        throw toError(`The instrument failed to respond. ${res.status}`)
       }
 
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let finished = false;
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ""
+      let finished = false
 
       while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+        const { done, value } = await reader.read()
+        if (done) break
 
-        buffer += decoder.decode(value, { stream: true });
-        const parsed = parseEvents(buffer);
-        buffer = parsed.rest;
+        buffer += decoder.decode(value, { stream: true })
+        const parsed = parseEvents(buffer)
+        buffer = parsed.rest
 
         for (const event of parsed.events) {
           if (event.type === "error") {
-            throw toError(event.message);
+            throw toError(event.message)
           }
 
-          setReading((current) => mergeReading(current, event.reading));
-          setVerifications(event.verifications);
+          currentReading = mergeReading(currentReading, event.reading)
+          setReading((current) => mergeReading(current, event.reading))
+          setVerifications(event.verifications)
+
+          if (hasVisibleReading(currentReading)) {
+            setMotionPhase((current) =>
+              current === "complete" ? current : "streaming"
+            )
+          }
 
           if (event.type === "finish") {
-            finished = true;
-            setIsLoading(false);
+            finished = true
+            setMotionPhase("complete")
+            setIsLoading(false)
           }
         }
       }
 
-      buffer += decoder.decode();
-      const parsed = parseEvents(buffer);
+      buffer += decoder.decode()
+      const parsed = parseEvents(buffer)
       for (const event of parsed.events) {
         if (event.type === "error") {
-          throw toError(event.message);
+          throw toError(event.message)
         }
-        setReading((current) => mergeReading(current, event.reading));
-        setVerifications(event.verifications);
+        currentReading = mergeReading(currentReading, event.reading)
+        setReading((current) => mergeReading(current, event.reading))
+        setVerifications(event.verifications)
+        if (hasVisibleReading(currentReading)) {
+          setMotionPhase((current) =>
+            current === "complete" ? current : "streaming"
+          )
+        }
         if (event.type === "finish") {
-          finished = true;
+          finished = true
+          setMotionPhase("complete")
         }
       }
 
       if (!finished && !controller.signal.aborted) {
-        setIsLoading(false);
+        setIsLoading(false)
+        setMotionPhase(hasVisibleReading(currentReading) ? "complete" : "idle")
       }
     } catch (streamError) {
-      if (controller.signal.aborted) return;
+      if (controller.signal.aborted) return
       setError(
         streamError instanceof Error
           ? streamError
-          : toError("The instrument failed to respond."),
-      );
-      setIsLoading(false);
+          : toError("The instrument failed to respond.")
+      )
+      setIsLoading(false)
+      setMotionPhase("idle")
     } finally {
       if (abortRef.current === controller) {
-        abortRef.current = null;
+        abortRef.current = null
       }
     }
   }
 
   function handlePress() {
-    const nextClaim = claim.trim();
-    if (nextClaim.length === 0) return;
+    const nextClaim = claim.trim()
+    if (nextClaim.length === 0) return
 
-    setHasPressed(true);
-    resetStreamState();
-    void streamPress(nextClaim);
+    setHasPressed(true)
+    resetStreamState()
+    setMotionPhase("arming")
+    requestAnimationFrame(() => {
+      setMotionPhase((current) => (current === "arming" ? "waiting" : current))
+    })
+    void streamPress(nextClaim)
   }
 
   function handlePressAgain() {
-    resetStreamState();
-    setHasPressed(false);
-    setClaim("");
+    resetStreamState()
+    setHasPressed(false)
+    setClaim("")
   }
 
   return (
@@ -178,6 +219,7 @@ export default function Page() {
         onClaimChange={setClaim}
         onPress={handlePress}
         isLoading={isLoading}
+        isPressActive={motionPhase !== "idle" && motionPhase !== "complete"}
       />
 
       {error ? (
@@ -188,9 +230,14 @@ export default function Page() {
 
       {hasPressed ? (
         <div className="mt-16 border-t border-neutral-200">
-          {AXES.map(({ key, numeral, title }) => (
+          <LoadingBridge
+            active={motionPhase === "arming" || motionPhase === "waiting"}
+          />
+
+          {AXES.map(({ key, numeral, title }, index) => (
             <AxisSection
               key={key}
+              index={index}
               numeral={numeral}
               title={title}
               prose={reading[key]?.prose}
@@ -199,7 +246,10 @@ export default function Page() {
             />
           ))}
 
-          <div className="flex items-baseline gap-4 border-t border-neutral-200 pt-16">
+          <div
+            className="motion-axis-header flex items-baseline gap-4 border-t border-neutral-200 pt-16"
+            style={{ "--motion-index": 3 } as CSSProperties}
+          >
             <span className="roman-numeral text-2xl text-ink">IV.</span>
             <h2 className="small-caps text-base text-neutral-700">
               A Question Yisu Might Ask in Response
@@ -211,7 +261,7 @@ export default function Page() {
             <button
               type="button"
               onClick={handlePressAgain}
-              className="small-caps text-xs text-neutral-500 hover:text-ink"
+              className="motion-tail-enter small-caps text-xs text-neutral-500 hover:text-ink"
             >
               Press again ↑
             </button>
@@ -219,5 +269,5 @@ export default function Page() {
         </div>
       ) : null}
     </main>
-  );
+  )
 }

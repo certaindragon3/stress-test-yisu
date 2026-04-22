@@ -1,33 +1,33 @@
-import { Streamdown } from "streamdown";
+import { Streamdown } from "streamdown"
 
-import { ProvenanceDrawer } from "@/components/provenance-drawer";
+import { ProvenanceDrawer } from "@/components/provenance-drawer"
 
-type Verification = "pending" | "verified" | "unverified";
+type Verification = "pending" | "verified" | "unverified"
 
 export function QuoteBlock({
   text,
   source,
   verification,
 }: {
-  text: string;
-  source: string;
-  verification: Verification;
+  text: string
+  source: string
+  verification: Verification
 }) {
   if (verification === "unverified") {
     return (
       <p className="small-caps mt-6 text-xs text-neutral-400">
         unverified — not rendered
       </p>
-    );
+    )
   }
 
   if (verification === "pending") {
-    return null;
+    return null
   }
 
   return (
-    <figure className="mt-8 border-l-2 border-ink pl-6">
-      <blockquote className="text-xl italic leading-relaxed text-neutral-800 [&_p]:m-0 [&_em]:not-italic [&_strong]:font-medium">
+    <figure className="motion-quote-enter mt-8 border-l-2 border-ink pl-6">
+      <blockquote className="text-xl leading-relaxed text-neutral-800 italic [&_em]:not-italic [&_p]:m-0 [&_strong]:font-medium">
         <Streamdown parseIncompleteMarkdown={false}>{text}</Streamdown>
       </blockquote>
       <figcaption className="mt-3 flex items-baseline gap-3 text-sm text-neutral-500">
@@ -36,5 +36,5 @@ export function QuoteBlock({
       </figcaption>
       <ProvenanceDrawer source={source} text={text} />
     </figure>
-  );
+  )
 }
