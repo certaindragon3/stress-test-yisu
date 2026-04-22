@@ -74,6 +74,32 @@
 - The provenance drawer still works.
 - No new route or second model call has been introduced.
 
+## Result
+
+Closed out on April 21, 2026.
+
+- Deployment: `https://stress-test.jiesen-huang.com`
+- Worker version: `6a46d46d-dba9-44b3-bc0c-cc0654ff1c23`
+- Production reachability: `HTTP 200`
+- Browser per-chip press timing:
+  `Prompting is the new literacy.` `≈ 5.0s`; `AI tutors will replace TAs within five years.` `≈ 4.6s`; `Kids shouldn't learn to code — leave it up to AI.` `≈ 5.1s`; `The essay is dead.` `≈ 4.5s`; `Within ten years, AI will replace many doctors and teachers.` `≈ 4.7s`
+- API benchmark cross-check:
+  `startTransfer ≈ 1.08s–1.24s`; `total ≈ 5.18s–5.81s`
+- Streaming audit: first-axis prose appeared before the final
+  blockquotes, badges, and `Press again ↑`; no buffered full-page reveal
+  was observed
+- Trust floor: `5/5` production presses rendered only verified
+  blockquotes; zero unverified placeholders appeared
+- Source diversity: `5/5` production audit presses surfaced three
+  distinct essay titles across the axis quotes
+- One-call invariant: browser verification showed exactly one
+  `/api/press` request per press
+- Provenance fidelity spot-check: a non-*Software 3.0* quote from
+  `职业教育的政治经济学故事, 职业教育的失败` resolved in the drawer with the
+  highlighted passage already scrolled into view
+
+Outcome: **pass**
+
 ## Failure handling
 
 - If timing passes locally but fails on production, Phase 4 is not done.

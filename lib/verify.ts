@@ -2,6 +2,7 @@
 export function normalize(s: string): string {
   return s
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/\[(?:\^[^\]]+|\d+(?:\s*[,-]\s*\d+)*)\]/g, "")
     .replace(/<\/?[^>]+>/g, "")
     .replace(/\\([[\]()*_`])/g, "$1")
     .replace(/[*_`]/g, "")

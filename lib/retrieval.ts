@@ -15,22 +15,30 @@ type CorpusChunk = {
   chunkOrder: number;
 };
 
+export type QuoteCandidate = {
+  id: string;
+  text: string;
+  source: string;
+};
+
 export type CorpusSelection = {
   corpus: string;
   excerptCount: number;
   sourceCount: number;
   charCount: number;
   mode: "retrieved" | "full";
+  quotes: Record<string, QuoteCandidate>;
 };
 
 const MAX_CHUNK_CHARS = 2_200;
-const MIN_CHUNK_CHARS = 900;
 const MAX_EXCERPTS = 8;
 const EXTRA_OVERALL_EXCERPTS = 2;
 const PRIMARY_FILE_CAP = 1;
 const RELAXED_FILE_CAP = 2;
 const SOFTWARE_FILE_CAP = 1;
 const SOFTWARE_3_FILE = "software-3-university-and-the-future-of-the-academy.md";
+const MIN_QUOTE_CHARS = 24;
+const MAX_QUOTE_CHARS = 360;
 
 const ENGLISH_STOPWORDS = new Set([
   "about",
@@ -333,9 +341,123 @@ function rankChunks(
   return scored.map(({ chunk }) => chunk);
 }
 
-function formatExcerpt(chunk: CorpusChunk): string {
+function sourceLabel(chunk: Pick<CorpusChunk, "title" | "section">): string {
+  return chunk.section ? `${chunk.title}, ${chunk.section}` : chunk.title;
+}
+
+function isSentenceBoundary(text: string, index: number): boolean {
+  const ch = text[index];
+  if ("。！？!?".includes(ch)) return true;
+  if (ch !== ".") return false;
+
+  const prev = text[index - 1] ?? "";
+  const next = text[index + 1] ?? "";
+  if (/\d/.test(prev) && /\d/.test(next)) return false;
+  if (next && !/[\s"'”’)\]】」』>]/.test(next) && next !== "[") return false;
+  return true;
+}
+
+function sentenceSpans(paragraph: string): Array<{ start: number; end: number }> {
+  const spans: Array<{ start: number; end: number }> = [];
+  let cursor = 0;
+
+  while (cursor < paragraph.length) {
+    while (cursor < paragraph.length && /\s/.test(paragraph[cursor])) cursor += 1;
+    if (cursor >= paragraph.length) break;
+
+    let end = cursor;
+    while (end < paragraph.length && !isSentenceBoundary(paragraph, end)) {
+      end += 1;
+    }
+
+    if (end >= paragraph.length) {
+      spans.push({ start: cursor, end: paragraph.length });
+      break;
+    }
+
+    end += 1;
+    while (
+      end < paragraph.length &&
+      `"'”’）)】]」』`.includes(paragraph[end])
+    ) {
+      end += 1;
+    }
+
+    while (true) {
+      const citation = /^\s*\[(?:\^[^\]]+|\d+(?:\s*[,-]\s*\d+)*)\]/.exec(
+        paragraph.slice(end),
+      );
+      if (!citation) break;
+      end += citation[0].length;
+    }
+
+    spans.push({ start: cursor, end });
+    cursor = end;
+  }
+
+  return spans;
+}
+
+function cleanQuoteText(text: string): string {
+  return text
+    .replace(/\s*\[(?:\^[^\]]+|\d+(?:\s*[,-]\s*\d+)*)\]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isEligibleQuote(paragraph: string, text: string): boolean {
+  if (!text) return false;
+  if (/^[-*]\s/.test(paragraph) || /^\d+\.\s/.test(paragraph)) return false;
+  return text.length >= MIN_QUOTE_CHARS && text.length <= MAX_QUOTE_CHARS;
+}
+
+function annotateChunk(
+  chunk: CorpusChunk,
+  quoteCounter: number,
+): { excerpt: string; quotes: QuoteCandidate[]; nextQuoteCounter: number } {
+  const paragraphs = chunk.body.split(/\n\s*\n/);
+  const quotes: QuoteCandidate[] = [];
+
+  const excerptBody = paragraphs
+    .map((paragraph) => {
+      const spans = sentenceSpans(paragraph);
+      if (spans.length === 0) return paragraph;
+
+      let cursor = 0;
+      let annotated = "";
+
+      for (const span of spans) {
+        annotated += paragraph.slice(cursor, span.start);
+        const rawText = paragraph.slice(span.start, span.end);
+        const text = cleanQuoteText(rawText);
+
+        if (isEligibleQuote(paragraph, text)) {
+          const id = `q${quoteCounter}`;
+          quoteCounter += 1;
+          quotes.push({
+            id,
+            text,
+            source: sourceLabel(chunk),
+          });
+          annotated += `<quote id="${id}">${rawText}</quote>`;
+        } else {
+          annotated += rawText;
+        }
+
+        cursor = span.end;
+      }
+
+      annotated += paragraph.slice(cursor);
+      return annotated;
+    })
+    .join("\n\n");
+
   const sectionHeading = chunk.section ? `\n## ${chunk.section}` : "";
-  return `<!-- file: ${chunk.filename} -->\n# ${chunk.title}${sectionHeading}\n\n${chunk.body}`;
+  return {
+    excerpt: `<!-- file: ${chunk.filename} -->\n# ${chunk.title}${sectionHeading}\n\n${excerptBody}`,
+    quotes,
+    nextQuoteCounter: quoteCounter,
+  };
 }
 
 export function selectCorpusForClaim(claim: string): CorpusSelection {
@@ -417,17 +539,29 @@ export function selectCorpusForClaim(claim: string): CorpusSelection {
       sourceCount: CORPUS_SOURCES.length,
       charCount: YISU_CORPUS.length,
       mode: "full",
+      quotes: {},
     };
   }
 
   const ordered = selected.slice(0, MAX_EXCERPTS);
+  const excerpts: string[] = [];
+  const quotes: QuoteCandidate[] = [];
+  let quoteCounter = 1;
 
-  const corpus = ordered.map(formatExcerpt).join("\n\n");
+  for (const chunk of ordered) {
+    const annotated = annotateChunk(chunk, quoteCounter);
+    excerpts.push(annotated.excerpt);
+    quotes.push(...annotated.quotes);
+    quoteCounter = annotated.nextQuoteCounter;
+  }
+
+  const corpus = excerpts.join("\n\n");
   return {
     corpus,
     excerptCount: ordered.length,
     sourceCount: new Set(ordered.map((chunk) => chunk.filename)).size,
     charCount: corpus.length,
     mode: "retrieved",
+    quotes: Object.fromEntries(quotes.map((quote) => [quote.id, quote])),
   };
 }

@@ -57,6 +57,13 @@ function normalizeWithMap(s: string): { norm: string; map: number[] } {
         i += linkMatch[0].length;
         continue;
       }
+      const citationMatch = /^\[(?:\^[^\]]+|\d+(?:\s*[,-]\s*\d+)*)\]/.exec(
+        rest,
+      );
+      if (citationMatch) {
+        i += citationMatch[0].length;
+        continue;
+      }
     }
 
     if (ch === "<") {

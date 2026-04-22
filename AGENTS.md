@@ -57,11 +57,14 @@ declaring a phase done, the `closeout.md` script must pass end-to-end.
 | 1 | Corpus landing | pending corpus review | [`doc/phase-1/epic.md`](./doc/phase-1/epic.md), [`doc/phase-1/closeout.md`](./doc/phase-1/closeout.md) |
 | 2 | Provenance drawer | shipped | [`doc/phase-2/epic.md`](./doc/phase-2/epic.md), [`doc/phase-2/closeout.md`](./doc/phase-2/closeout.md) |
 | 3 | Demo readiness (Cloudflare + fallback) | in progress | [`doc/phase-3/epic.md`](./doc/phase-3/epic.md), [`doc/phase-3/closeout.md`](./doc/phase-3/closeout.md), [`doc/phase-3/deploy-runbook.md`](./doc/phase-3/deploy-runbook.md) |
-| 4 | Performance hardening | planned | [`doc/phase-4/epic.md`](./doc/phase-4/epic.md), [`doc/phase-4/closeout.md`](./doc/phase-4/closeout.md) |
+| 4 | Performance hardening | shipped | [`doc/phase-4/epic.md`](./doc/phase-4/epic.md), [`doc/phase-4/closeout.md`](./doc/phase-4/closeout.md) |
 
-Phase 4 was opened because the deployed instrument currently misses the
-Phase 3 press-latency budget. Phase 3 remains the demo-readiness gate;
-Phase 4 is the dedicated performance workstream required to unblock it.
+Phase 4 was opened because the deployed instrument missed the Phase 3
+press-latency budget. It closed out on April 21, 2026 after the
+production press path passed timing, streaming, trust-floor,
+source-diversity, provenance, and one-call checks. Phase 3 remains the
+demo-readiness gate because the venue-network and fallback-drill checks
+still need end-to-end sign-off.
 
 Phase 2 is settled to be an **inline drawer on the same page**, not a
 parallel route. The "one screen, one voice" invariant is load-bearing;
@@ -306,3 +309,32 @@ or badly. Do it well.
 *The author of this instrument is Jiesen Huang. The intellectual frame
 is Yisu Zhou's, used with permission. The instrument was built for the
 DKU International Education Innovation Forum, 2026.*
+
+## Cross-Agent Collaboration
+
+This repository may be operated by both Codex and Claude Code. Keep
+this file as the canonical shared instruction layer so both agents can
+read the same project contract before work begins.
+
+- Add repository-wide collaboration rules here first. Use `CLAUDE.md`
+  only for Claude-specific elaborations that do not need to be read by
+  Codex.
+- The active agent owns implementation. The other agent should be used
+  as a bounded reviewer or researcher through its CLI, not as a second
+  concurrent editor on the same files.
+- Before finalizing substantive changes to `lib/system-prompt.ts`,
+  `lib/verify.ts`, `app/api/press/route.ts`, documents under
+  `doc/phase-*`, public API or JSON contract changes, or dependency
+  changes, request a read-only review from the other agent.
+- Do not let Codex and Claude make overlapping in-flight edits to the
+  same file. Hand-offs must happen through an explicit plan, patch, or
+  commit.
+- If Claude Code is the primary agent, prefer Codex as the second
+  opinion for bounded code changes, verification plans, and
+  implementation-risk review.
+- If Codex is the primary agent, prefer Claude Code as the second
+  opinion for authored prompt language, project-manual edits, and
+  phase-document wording.
+- Suggested read-only review commands:
+- `claude -p --no-session-persistence --permission-mode dontAsk "Review the proposed change in this repo. Return concrete risks, conflicts with repo instructions, and recommendation."`
+- `codex exec -C . -s read-only -a never --search "Review the proposed change in this repo. Return concrete risks, conflicts with repo instructions, and recommendation."`

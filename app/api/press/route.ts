@@ -5,20 +5,24 @@ import {
 } from "@ai-sdk/google";
 
 import {
-  deriveVerifications,
-  mergeReading,
+  AXIS_KEYS,
+  createPendingVerifications,
   type PartialReading,
   type PressStreamEvent,
+  type VerificationMap,
 } from "@/lib/press-stream";
-import { selectCorpusForClaim } from "@/lib/retrieval";
-import { ReadingSchema } from "@/lib/schema";
+import { resolveSource } from "@/lib/provenance";
+import {
+  selectCorpusForClaim,
+  type QuoteCandidate,
+} from "@/lib/retrieval";
+import { ModelReadingSchema } from "@/lib/schema";
 import { buildSystemPrompt } from "@/lib/system-prompt";
-import { YISU_CORPUS } from "@/lib/corpus";
-import { normalize } from "@/lib/verify";
+import { verifyQuote } from "@/lib/verify";
 
 const DEFAULT_MODEL_ID = "gemini-2.5-flash";
 const DEFAULT_MAX_OUTPUT_TOKENS = 900;
-const DEFAULT_TEMPERATURE = 0.4;
+const DEFAULT_TEMPERATURE = 0;
 
 const MODEL_ID = (process.env.GEMINI_MODEL_ID ?? DEFAULT_MODEL_ID).trim();
 const THINKING_LEVEL = parseThinkingLevel(process.env.GEMINI_THINKING_LEVEL);
@@ -30,7 +34,6 @@ export const runtime = "nodejs";
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
-const NORMALIZED_YISU_CORPUS = normalize(YISU_CORPUS);
 const MAX_OUTPUT_TOKENS = parsePositiveInt(
   process.env.GEMINI_MAX_OUTPUT_TOKENS,
   DEFAULT_MAX_OUTPUT_TOKENS,
@@ -141,10 +144,146 @@ function buildCallerPrompt(claim: string): string {
     claim,
     "",
     "Caller constraints:",
-    "- Quotations are checked mechanically against the retrieved corpus. Copy exact substrings only; if exact wording is uncertain, set quote to null.",
+    "- The retrieved corpus contains inline anchors like <quote id=\"q12\">...</quote>.",
+    "- For each axis, select exactly one quoteId from those anchors, or set quote to null.",
+    "- Do not generate quote text or source labels yourself. The caller will hydrate the exact quote and source from the quoteId you choose.",
     "- When the retrieved corpus honestly supports it, prefer different essay titles across the three axis quotes rather than repeating the same essay.",
-    "- If breadth and exactness conflict, preserve exactness and set quote to null rather than invent breadth.",
+    "- If no anchored sentence fits honestly, set quote to null rather than forcing a weak citation.",
   ].join("\n");
+}
+
+type PartialModelQuote = {
+  quoteId?: string;
+};
+
+type PartialModelAxis = {
+  prose?: string;
+  quote?: PartialModelQuote | null;
+};
+
+type PartialModelReading = {
+  epistemological?: PartialModelAxis;
+  mastery?: PartialModelAxis;
+  jurisdictional?: PartialModelAxis;
+  question?: string;
+};
+
+function mergeModelReading(
+  base: PartialModelReading | null | undefined,
+  incoming: PartialModelReading | null | undefined,
+): PartialModelReading {
+  const merged: PartialModelReading = {
+    ...(base ?? {}),
+  };
+
+  for (const key of AXIS_KEYS) {
+    const nextAxis = incoming?.[key];
+    if (nextAxis === undefined) continue;
+
+    const previousAxis = merged[key];
+    const nextQuote =
+      nextAxis.quote === undefined
+        ? previousAxis?.quote
+        : nextAxis.quote === null
+          ? null
+          : {
+              ...(previousAxis?.quote && previousAxis.quote !== null
+                ? previousAxis.quote
+                : {}),
+              ...nextAxis.quote,
+            };
+
+    merged[key] = {
+      ...(previousAxis ?? {}),
+      ...nextAxis,
+      quote: nextQuote,
+    };
+  }
+
+  if (incoming?.question !== undefined) {
+    merged.question = incoming.question;
+  }
+
+  return merged;
+}
+
+function hydrateReading(
+  reading: PartialModelReading,
+  quotes: Record<string, QuoteCandidate>,
+  isFinal: boolean,
+): {
+  reading: PartialReading;
+  verifications: VerificationMap;
+} {
+  const hydrated: PartialReading = {};
+  const verifications = createPendingVerifications();
+
+  for (const key of AXIS_KEYS) {
+    const modelAxis = reading[key];
+    if (!modelAxis) {
+      if (isFinal) {
+        verifications[key] = "unverified";
+      }
+      continue;
+    }
+
+    const axis: PartialReading[typeof key] = {};
+    if (modelAxis.prose !== undefined) {
+      axis.prose = modelAxis.prose;
+    }
+
+    const quote = modelAxis.quote;
+    if (quote === null) {
+      axis.quote = null;
+      verifications[key] = isFinal ? "verified" : "pending";
+      hydrated[key] = axis;
+      continue;
+    }
+
+    if (quote === undefined) {
+      if (isFinal) {
+        axis.quote = null;
+        verifications[key] = "unverified";
+      }
+      if (Object.keys(axis).length > 0) {
+        hydrated[key] = axis;
+      }
+      continue;
+    }
+
+    const candidate = quote.quoteId ? quotes[quote.quoteId] : undefined;
+    if (!candidate) {
+      if (isFinal) {
+        axis.quote = null;
+        verifications[key] = "unverified";
+      }
+      if (Object.keys(axis).length > 0) {
+        hydrated[key] = axis;
+      }
+      continue;
+    }
+
+    const resolved = resolveSource(candidate.source);
+    const verified = resolved ? verifyQuote(candidate.text, resolved.body) : false;
+    verifications[key] = verified ? "verified" : isFinal ? "unverified" : "pending";
+    axis.quote =
+      verifications[key] === "unverified"
+        ? null
+        : {
+            text: candidate.text,
+            source: candidate.source,
+          };
+    hydrated[key] = axis;
+  }
+
+  if (reading.question !== undefined) {
+    hydrated.question = reading.question;
+  }
+
+  return {
+    reading: hydrated,
+    verifications,
+  };
 }
 
 export async function POST(req: Request) {
@@ -160,7 +299,7 @@ export async function POST(req: Request) {
   let streamError: unknown = null;
   const result = streamText({
     model: google(MODEL_ID),
-    output: Output.object({ schema: ReadingSchema }),
+    output: Output.object({ schema: ModelReadingSchema }),
     system: buildSystemPrompt(selection.corpus),
     prompt: buildCallerPrompt(trimmed),
     maxOutputTokens: MAX_OUTPUT_TOKENS,
@@ -171,22 +310,26 @@ export async function POST(req: Request) {
     },
   });
 
-  let latestReading: PartialReading = {};
+  let latestModelReading: PartialModelReading = {};
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       try {
         for await (const partial of result.partialOutputStream) {
-          latestReading = mergeReading(latestReading, partial as PartialReading);
+          latestModelReading = mergeModelReading(
+            latestModelReading,
+            partial as PartialModelReading,
+          );
+          const hydrated = hydrateReading(
+            latestModelReading,
+            selection.quotes,
+            false,
+          );
           controller.enqueue(
             encodeEvent({
               type: "partial",
-              reading: latestReading,
-              verifications: deriveVerifications(
-                latestReading,
-                NORMALIZED_YISU_CORPUS,
-                false,
-              ),
+              reading: hydrated.reading,
+              verifications: hydrated.verifications,
             }),
           );
         }
@@ -202,19 +345,20 @@ export async function POST(req: Request) {
           return;
         }
 
-        latestReading = mergeReading(
-          latestReading,
-          (await result.output) as PartialReading,
+        latestModelReading = mergeModelReading(
+          latestModelReading,
+          (await result.output) as PartialModelReading,
+        );
+        const hydrated = hydrateReading(
+          latestModelReading,
+          selection.quotes,
+          true,
         );
         controller.enqueue(
           encodeEvent({
             type: "finish",
-            reading: latestReading,
-            verifications: deriveVerifications(
-              latestReading,
-              NORMALIZED_YISU_CORPUS,
-              true,
-            ),
+            reading: hydrated.reading,
+            verifications: hydrated.verifications,
           }),
         );
         controller.close();
