@@ -83,6 +83,38 @@
 - Reduced-motion mode works.
 - Phase 4's one-call, streaming, and trust-floor invariants still hold.
 
+## Result
+
+Closed out on April 22, 2026.
+
+- Deployment: `https://stress-test.jiesen-huang.com`
+- Worker version: `bc8336ae-7ac4-4f23-b33e-384c17d66165`
+- Local checks: `pnpm typecheck` and `pnpm build` passed
+- At-rest audit: the page remained visually still before interaction;
+  no ambient looping motion appeared
+- Immediate acknowledgement: the chip, button, and input state changed
+  immediately on press, before the full reading resolved
+- Waiting-to-stream handoff: the typographic bridge was observed on the
+  deployed build during the click-to-first-token gap, and on faster
+  production responses the interface moved directly into streamed prose
+  without a dead blank interval
+- Axis choreography: production observation showed first-axis prose
+  arriving before the full reading completed; verified quotations and
+  the final question entered only once their content was ready, and
+  `Press again ↑` appeared only after the reading resolved
+- Provenance drawer: the drawer opened and closed with the shaped WAAPI
+  motion path, auto-scrolled the highlighted passage into view, and did
+  not collapse back to the earlier one-line-height bug
+- Reduced-motion audit: verified in-browser with `agent-browser set
+  media reduced-motion`; the reading still completed correctly and the
+  provenance path remained intact with materially reduced motion
+- Phase 4 guardrails: one production press still emitted exactly one
+  `POST /api/press`; rendered quotations stayed on the trust floor with
+  visible `✓ verified` badges only; opening provenance added one
+  `POST /api/provenance` and no second generation request
+
+Outcome: **pass**
+
 ## Failure handling
 
 - If the page gains ambient decorative motion at rest, Phase 5 is not

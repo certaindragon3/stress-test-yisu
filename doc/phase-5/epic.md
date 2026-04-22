@@ -6,8 +6,9 @@
 
 ## Status
 
-Approved on 2026-04-21. Implemented locally and awaiting formal
-closeout.
+Approved on 2026-04-21. Closed out on 2026-04-22 against the deployed
+build at `https://stress-test.jiesen-huang.com` (Worker version
+`bc8336ae-7ac4-4f23-b33e-384c17d66165`).
 
 ## Goal
 
