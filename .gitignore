@@ -48,3 +48,8 @@ next-env.d.ts
 # local wrangler secrets
 .dev.vars
 .wrangler/
+
+# local Claude/Codex runtime artifacts
+/.claude/settings.local.json
+/.claude/scheduled_tasks.lock
+/.claude/worktrees/
