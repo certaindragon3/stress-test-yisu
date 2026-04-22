@@ -58,6 +58,7 @@ declaring a phase done, the `closeout.md` script must pass end-to-end.
 | 2 | Provenance drawer | shipped | [`doc/phase-2/epic.md`](./doc/phase-2/epic.md), [`doc/phase-2/closeout.md`](./doc/phase-2/closeout.md) |
 | 3 | Demo readiness (Cloudflare + fallback) | in progress | [`doc/phase-3/epic.md`](./doc/phase-3/epic.md), [`doc/phase-3/closeout.md`](./doc/phase-3/closeout.md), [`doc/phase-3/deploy-runbook.md`](./doc/phase-3/deploy-runbook.md) |
 | 4 | Performance hardening | shipped | [`doc/phase-4/epic.md`](./doc/phase-4/epic.md), [`doc/phase-4/closeout.md`](./doc/phase-4/closeout.md) |
+| 5 | Motion choreography | shipped | [`doc/phase-5/epic.md`](./doc/phase-5/epic.md), [`doc/phase-5/closeout.md`](./doc/phase-5/closeout.md) |
 
 Phase 4 was opened because the deployed instrument missed the Phase 3
 press-latency budget. It closed out on April 21, 2026 after the
@@ -65,6 +66,10 @@ production press path passed timing, streaming, trust-floor,
 source-diversity, provenance, and one-call checks. Phase 3 remains the
 demo-readiness gate because the venue-network and fallback-drill checks
 still need end-to-end sign-off.
+
+Phase 5 closed out on April 22, 2026 after the deployed build passed
+motion, reduced-motion, provenance-drawer, and Phase 4 guardrail checks
+without breaking the instrument's single-screen shape.
 
 Phase 2 is settled to be an **inline drawer on the same page**, not a
 parallel route. The "one screen, one voice" invariant is load-bearing;

@@ -8,7 +8,7 @@ before writing any code.
 
 **The AI Discourse Stress-Tester** is a web instrument that presses a
 claim about AI and education through three dimensions drawn from Yisu
-Zhou's *Software 3.0 University* keynote. It is not a chatbot. It
+Zhou's _Software 3.0 University_ keynote. It is not a chatbot. It
 performs one intellectual operation. Its engineering spec lives in
 [BUILD_SPEC.md](./BUILD_SPEC.md); read it first.
 
@@ -42,7 +42,7 @@ performs one intellectual operation. Its engineering spec lives in
 
 ## Phase plan
 
-The build is staged into four phases. Each lives under `doc/phase-N/`
+The build is staged into documented phases. Each lives under `doc/phase-N/`
 and contains two files: an **`epic.md`** (goal, scope, acceptance
 criteria, open questions) and a **`closeout.md`** (a verification
 script written to be executed by `agent-browser` against the running
@@ -51,13 +51,15 @@ instrument, with explicit pass criteria).
 Before starting work in any phase, read its `epic.md`. Before
 declaring a phase done, the `closeout.md` script must pass end-to-end.
 
-| Phase | Title | Status | Documents |
-|-------|-------|--------|-----------|
-| 0 | Scaffold | shipped | [`doc/phase-0/epic.md`](./doc/phase-0/epic.md), [`doc/phase-0/closeout.md`](./doc/phase-0/closeout.md) |
-| 1 | Corpus landing | pending corpus review | [`doc/phase-1/epic.md`](./doc/phase-1/epic.md), [`doc/phase-1/closeout.md`](./doc/phase-1/closeout.md) |
-| 2 | Provenance drawer | shipped | [`doc/phase-2/epic.md`](./doc/phase-2/epic.md), [`doc/phase-2/closeout.md`](./doc/phase-2/closeout.md) |
-| 3 | Demo readiness (Cloudflare + fallback) | in progress | [`doc/phase-3/epic.md`](./doc/phase-3/epic.md), [`doc/phase-3/closeout.md`](./doc/phase-3/closeout.md), [`doc/phase-3/deploy-runbook.md`](./doc/phase-3/deploy-runbook.md) |
-| 4 | Performance hardening | shipped | [`doc/phase-4/epic.md`](./doc/phase-4/epic.md), [`doc/phase-4/closeout.md`](./doc/phase-4/closeout.md) |
+| Phase | Title                                  | Status                | Documents                                                                                                                                                                  |
+| ----- | -------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | Scaffold                               | shipped               | [`doc/phase-0/epic.md`](./doc/phase-0/epic.md), [`doc/phase-0/closeout.md`](./doc/phase-0/closeout.md)                                                                     |
+| 1     | Corpus landing                         | pending corpus review | [`doc/phase-1/epic.md`](./doc/phase-1/epic.md), [`doc/phase-1/closeout.md`](./doc/phase-1/closeout.md)                                                                     |
+| 2     | Provenance drawer                      | shipped               | [`doc/phase-2/epic.md`](./doc/phase-2/epic.md), [`doc/phase-2/closeout.md`](./doc/phase-2/closeout.md)                                                                     |
+| 3     | Demo readiness (Cloudflare + fallback) | in progress           | [`doc/phase-3/epic.md`](./doc/phase-3/epic.md), [`doc/phase-3/closeout.md`](./doc/phase-3/closeout.md), [`doc/phase-3/deploy-runbook.md`](./doc/phase-3/deploy-runbook.md) |
+| 4     | Performance hardening                  | shipped               | [`doc/phase-4/epic.md`](./doc/phase-4/epic.md), [`doc/phase-4/closeout.md`](./doc/phase-4/closeout.md)                                                                     |
+| 5     | Motion choreography                    | shipped               | [`doc/phase-5/epic.md`](./doc/phase-5/epic.md), [`doc/phase-5/closeout.md`](./doc/phase-5/closeout.md)                                                                     |
+| 6     | Inline epistemological companion       | proposed              | [`doc/phase-6/epic.md`](./doc/phase-6/epic.md), [`doc/phase-6/closeout.md`](./doc/phase-6/closeout.md)                                                                     |
 
 Phase 4 was opened because the deployed instrument missed the Phase 3
 press-latency budget. It closed out on April 21, 2026 after the
@@ -65,6 +67,15 @@ production press path passed timing, streaming, trust-floor,
 source-diversity, provenance, and one-call checks. Phase 3 remains the
 demo-readiness gate because the venue-network and fallback-drill checks
 still need end-to-end sign-off.
+
+Phase 5 closed out on April 22, 2026 after the deployed build passed
+motion, reduced-motion, provenance-drawer, and Phase 4 guardrail checks
+without breaking the instrument's single-screen shape.
+
+Phase 6 is an inline companion addition inside the main single view: a
+silent ruler nested into Axis I. It may enrich the existing page, but
+it must not introduce a second route, second model call, or second
+product voice.
 
 Phase 2 is settled to be an **inline drawer on the same page**, not a
 parallel route. The "one screen, one voice" invariant is load-bearing;
@@ -275,7 +286,7 @@ or badly. Do it well.
 ## Notes for whoever maintains this file
 
 - The prompt above is **v0**, authored from the published text of the
-  *Software 3.0 University* keynote alone. A v1 will follow after the
+  _Software 3.0 University_ keynote alone. A v1 will follow after the
   author's co-design meeting with Yisu, in which his **methodological
   fingerprint** (his own first and second filters when reading AI
   discourse), his **negative constraints** (things he does not want the
@@ -306,9 +317,9 @@ or badly. Do it well.
 - Before any substantive change to `lib/system-prompt.ts`,
   `lib/verify.ts`, or `app/api/press/route.ts`, re-read this file.
 
-*The author of this instrument is Jiesen Huang. The intellectual frame
+_The author of this instrument is Jiesen Huang. The intellectual frame
 is Yisu Zhou's, used with permission. The instrument was built for the
-DKU International Education Innovation Forum, 2026.*
+DKU International Education Innovation Forum, 2026._
 
 ## Claude Code Collaboration Addendum
 
