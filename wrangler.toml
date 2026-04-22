@@ -14,6 +14,11 @@ custom_domain = true
 directory = ".open-next/assets"
 binding = "ASSETS"
 
+[vars]
+GEMINI_MODEL_ID = "gemini-2.5-pro"
+GEMINI_THINKING_BUDGET = "128"
+GEMINI_TEMPERATURE = "0"
+
 # Required secret:
 #   pnpm wrangler secret put GEMINI_API_KEY
 #
