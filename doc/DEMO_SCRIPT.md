@@ -51,8 +51,8 @@ at the back row. Then read the slide.
 
 〔beat · 3s — let the question hang〕
 
-> *(quieter, slower)* "That teacher is a contract. Written before the
-> robot was invited in."
+> *(quieter, slower)* "That teacher is a contract — a standard of
+> judgment — written before the robot was invited in."
 
 〔···〕 Do not explain the word *contract*. Plant it. Move.
 
@@ -118,7 +118,7 @@ Bridge:
 Read the slide body at a slower tempo than the hook. Four words, four
 beats:
 
-> "Direction. Invariants. Verification. Phases."
+> "Direction. Non-negotiable rules. Verification. Phases."
 
 After the closer, add the translation — this is the only place in the
 talk to name the jargon:
@@ -180,7 +180,7 @@ Read the title and the closer; do not narrate the table. After ~4s of
 letting the audience read the table:
 
 > "Each phase opens with an epic. Each phase closes with a verification
-> script. The contract is the commit."
+> script. The spec is the signature."
 
 〔beat〕
 
@@ -200,7 +200,7 @@ Bridge:
 Read the slide:
 
 > "Two jobs stay with the human. **Coordination.** And the decision at
-> the seam."
+> the seam — where human and machine meet."
 >
 > "Everything else — the typing, the lookup, the drafts, the wiring, the
 > tests — goes to the agent."
@@ -280,17 +280,19 @@ Read `main` plainly, no affect:
 
 Read the accent line quieter, slower:
 
-> "`verifyQuote()` gated the render. The contract made the judgment —
-> not the operator."
+> "A verification rule gated the render. The system enforced academic
+> integrity — not the operator."
 
-〔beat · 2s〕 This is the moment the word *contract*, planted in Slide
-1, lands.
+〔beat · 2s〕 Do not rush past *academic integrity* — that is the word
+this room is built to hear. This is also the moment where the idea
+planted in Slide 1 — *contract* as a standard of judgment — is shown
+to have been rendered as a machine-readable rule.
 
 ### 【SLIDE 9 — CLOSE】
 
 Read at the pace of the hook. Same pace. Closing the loop.
 
-> "Orchestration is not leaving the work."
+> "Orchestration is not abandoning the work."
 
 〔beat · 2s〕
 

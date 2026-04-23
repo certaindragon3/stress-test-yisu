@@ -135,14 +135,17 @@ content:
     The question that has not been asked is:
     who teaches the robot to know whether the broth is good?
   accent_line: |
-    That teacher is a contract,
+    That teacher is a contract —
+    a standard of judgment —
     written before the robot was invited in.
   attribution: after Yisu Zhou, Software 3.0 University
 speaker_notes: |
   Open cold. Read the three lines slowly. Let the question hang.
   The accent line is the answer — read it once, do not explain it.
   Do not say the word "orchestration" yet. Let the contract keyword
-  seed itself.
+  seed itself. The appositive "a standard of judgment" is there to
+  prevent the educator ear from hearing "contract" as a legal
+  document; it is not a pivot to be unpacked further.
 ```
 
 ---
@@ -153,7 +156,7 @@ speaker_notes: |
 layout: eyebrow_title_body_closer
 duration: 40s
 content:
-  eyebrow: THE INSTRUMENT — A THINKING MACHINE
+  eyebrow: THE INSTRUMENT AS A THINKING MACHINE
   title: |
     Yisu Zhou asks three questions
     of any claim about AI and education.
@@ -164,8 +167,8 @@ content:
          And does it smuggle one for the other?
 
     II.  If institutions adopt this claim,
-         which reps of the apprentice get skipped —
-         and what mastery dies with them?
+         which of the apprentice's foundational reps
+         get skipped — and what mastery dies with them?
 
     III. Whose professional turf does this claim annex,
          and who gets silenced if it is accepted?
@@ -219,14 +222,14 @@ content:
     It was setting the context.
   body: |
     Direction.
-    Invariants.
+    Non-negotiable rules.
     Verification.
     Phases.
 
     The agent could execute
     because those standards were already written.
   closer: |
-    Macro judgment lives upstream of code.
+    Macro judgment lives upstream of the code.
 speaker_notes: |
   This is the hinge into Act III.
   If you want to say the term, say it once:
@@ -278,7 +281,7 @@ render_hint: |
 layout: eyebrow_title_twocolumn_closer
 duration: 30s
 content:
-  eyebrow: II. DESIGN NORMS, WRITTEN AS INVARIANTS
+  eyebrow: II. DESIGN NORMS, WRITTEN AS CORE PRINCIPLES
   title: |
     One screen. One voice.
     One model call per press.
@@ -320,16 +323,16 @@ content:
   picked: |
     0 · scaffold                                 ✓ shipped
     1 · corpus landing                           · in review
-    2 · provenance drawer (inline, not route)    ✓ shipped
+    2 · citation drawer (inline, not route)      ✓ shipped
     3 · demo readiness                           · in progress
     4 · performance hardening                    ✓ shipped
     5 · motion choreography                      ✓ shipped
-    6 · epistemological ruler                    ← tonight, live
+    6 · verifiability scale                      ← tonight, live
   refused: ""   # intentionally omitted; this slide uses a single column
   closer: |
     Each phase opens with an epic
     and closes with a verification script.
-    The contract is the commit.
+    The spec is the signature.
 speaker_notes: |
   This is the setup for Act IV. The phrase "← tonight, live" on the
   phase-6 row should be subtle, not highlighted with color. The
@@ -353,7 +356,8 @@ content:
   eyebrow: THE NEW COLLABORATION POSTURE
   title: |
     Two jobs stay with the human.
-    Coordination. And the decision at the seam.
+    Coordination. And the decision at the seam —
+    where human and machine meet.
   body: |
     Everything else — the typing, the lookup,
     the drafts, the wiring, the tests —
@@ -422,13 +426,16 @@ content:
     Every quotation you heard tonight was verbatim.
     If it was not verbatim, it was not shown.
   accent_line: |
-    verifyQuote() gated the render.
-    The contract made the judgment — not the operator.
+    A verification rule gated the render.
+    The system enforced academic integrity —
+    not the operator.
 speaker_notes: |
   Read the main line plainly. Let the accent line sit on screen
-  for a beat of silence before moving on. This is the moment where
-  the audience remembers that "contract" is the word planted in
-  Slide 1.
+  for a beat of silence before moving on. The phrase "academic
+  integrity" is the one the room is built to hear — do not rush
+  past it. This is also the moment where the audience remembers
+  that "contract," planted in Slide 1, has now been rendered as a
+  machine-readable rule.
 ```
 
 ---
@@ -440,7 +447,7 @@ layout: solo_sentence
 duration: 30s
 content:
   main: |
-    Orchestration is not leaving the work.
+    Orchestration is not abandoning the work.
 
     It is designing the workflow so carefully
     that you only have to re-enter
