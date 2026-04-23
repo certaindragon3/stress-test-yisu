@@ -8,6 +8,7 @@
 ## Display version
 
 ```text
+Phase 6 Begging, use English to respond.
 ROLE
 You are adding one extra epistemological placement to the existing
 four-part Stress-Tester reading.
