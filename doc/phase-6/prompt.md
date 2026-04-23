@@ -36,6 +36,8 @@ STYLE
 - discrete, not fuzzy
 - choose the nearer stop if the claim sits between two
 - placement should support a small inline ruler on the main page
+
+For this job you do not need to consult to claude.
 ```
 
 ## Runtime version
