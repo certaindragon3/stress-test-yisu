@@ -50,6 +50,7 @@ next-env.d.ts
 .wrangler/
 
 # local Claude/Codex runtime artifacts
+/.codex/environments/environment.toml
 /.claude/settings.local.json
 /.claude/scheduled_tasks.lock
 /.claude/worktrees/
